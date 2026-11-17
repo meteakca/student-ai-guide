@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
 <title>LTHD Student AI Guide</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="What counts as AI use in LTHD courses, a short quiz, and a completion certificate to upload in each course.">
@@ -31,20 +32,7 @@
   --head: "Public Sans", "Segoe UI", Arial, sans-serif;
   --body: "Atkinson Hyperlegible", "Segoe UI", Verdana, sans-serif;
   --radius: 10px;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0e1622; --surface: #172233; --line: #2a3a50; --text: #e8edf4; --text-2: #a9b6c7;
-    --navy: #0a1c33; --navy-ink: #ffffff; --band: #152236; --heading: #e8edf4; --kicker: #d3b170; --gold: #d3b170; --link: #8ab8f5;
-    --good: #7fd3a0; --good-bg: #13301f; --bad: #ff9c85; --bad-bg: #3a1a14;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0e1622; --surface: #172233; --line: #2a3a50; --text: #e8edf4; --text-2: #a9b6c7;
-  --navy: #0a1c33; --navy-ink: #ffffff; --band: #152236; --heading: #e8edf4; --kicker: #d3b170; --gold: #d3b170; --link: #8ab8f5;
-  --good: #7fd3a0; --good-bg: #13301f; --bad: #ff9c85; --bad-bg: #3a1a14;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; }
@@ -98,8 +86,6 @@ td:first-child { font-weight: 700; }
 .lvl.no { background: var(--bad-bg); color: var(--bad); }
 .lvl.re { background: #fdf3df; color: #7a5410; }
 .lvl.op { background: var(--good-bg); color: var(--good); }
-:root[data-theme="dark"] .lvl.re { background: #3a2e14; color: #f0cf8a; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .lvl.re { background: #3a2e14; color: #f0cf8a; } }
 
 .cases { display: grid; gap: 12px; margin-bottom: 18px; }
 .case { border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; }
@@ -126,8 +112,6 @@ ul.contacts li::before { content: ""; position: absolute; left: 0; top: 0.62em; 
 .btn.ghost { background: transparent; color: var(--text); border-color: var(--line); }
 .btn.ghost:hover:not(:disabled) { border-color: var(--text-2); background: var(--surface); }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-:root[data-theme="dark"] .btn:not(.gold):not(.ghost) { background: #2b5ea8; border-color: #2b5ea8; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn:not(.gold):not(.ghost) { background: #2b5ea8; border-color: #2b5ea8; } }
 
 /* Quiz view */
 .view { padding-block: 32px 72px; }
