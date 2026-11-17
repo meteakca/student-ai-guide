@@ -325,7 +325,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
 
   <div id="certWrap" hidden>
     <div class="cert" id="cert" aria-label="Certificate of completion">
-      <div class="top"><span>LTHD · Georgia Southern University</span><span>Student AI Guide</span></div>
+      <div class="top"><span>Georgia Southern University</span><span>Student AI Guide</span></div>
       <div class="body">
         <h3>Certificate of Completion</h3>
         <div class="label">Awarded to</div>
@@ -411,7 +411,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
       e: "Your instructor decides the sanction. It can range from an educational sanction, such as a research paper, to a lower grade on the assignment, up to a complete loss of credit for the course. Warning, probation, suspension, and expulsion come only through the Office of Student Conduct." }
   ];
   const ACK = [
-    "I read the LTHD Student Guide to AI Use.",
+    "I read the Student Guide to AI Use.",
     "I will check the AI level in each syllabus and assignment, and I will ask my instructor when I am unsure.",
     "I will disclose any AI use my course allows, unless the syllabus says otherwise.",
     "I will keep my drafts, notes, and version history for my assignments.",
@@ -571,7 +571,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
     const iso = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
     cert = { name, course, iso, code: code([name.toLowerCase(), course, iso, VERSION].join("|")) };
     $("cName").textContent = name;
-    $("cText").textContent = `${name} completed the LTHD Student Guide to AI Use, answered all quiz questions correctly, and signed the acknowledgment.`;
+    $("cText").textContent = `${name} completed the Student Guide to AI Use, answered all quiz questions correctly, and signed the acknowledgment.`;
     $("cCourse").textContent = course;
     $("cDate").textContent = iso;
     $("cCode").textContent = cert.code;
@@ -590,7 +590,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
     const NAVY = [11, 37, 69], GOLD = [184, 149, 79], TXT = [28, 36, 48], MUTE = [74, 85, 102];
     doc.setFillColor(...NAVY); doc.rect(0, 0, W, 78, "F");
     doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(255, 255, 255);
-    doc.text("LEADERSHIP, TECHNOLOGY, AND HUMAN DEVELOPMENT  ·  GEORGIA SOUTHERN UNIVERSITY", L, 44);
+    doc.text("GEORGIA SOUTHERN UNIVERSITY", L, 44);
     doc.setTextColor(...GOLD); doc.text("STUDENT AI GUIDE", R, 44, { align: "right" });
     doc.setFillColor(...GOLD); doc.rect(0, 78, W, 6, "F");
     doc.setTextColor(...TXT); doc.setFontSize(38); doc.text("Certificate of Completion", L, 156);
@@ -598,7 +598,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
     doc.setFontSize(30); doc.setTextColor(...TXT); doc.text(doc.splitTextToSize(cert.name, R - L)[0], L, 246);
     doc.setDrawColor(...TXT); doc.setLineWidth(1.2); doc.line(L, 260, R, 260);
     doc.setFont("helvetica", "normal"); doc.setFontSize(14); doc.setTextColor(...TXT);
-    doc.text(doc.splitTextToSize(`${cert.name} completed the LTHD Student Guide to AI Use, answered all quiz questions correctly, and signed the acknowledgment.`, R - L), L, 296, { lineHeightFactor: 1.45 });
+    doc.text(doc.splitTextToSize(`${cert.name} completed the Student Guide to AI Use, answered all quiz questions correctly, and signed the acknowledgment.`, R - L), L, 296, { lineHeightFactor: 1.45 });
     doc.setDrawColor(213, 220, 230); doc.setLineWidth(1); doc.line(L, 420, R, 420);
     const cols = [["COURSE", cert.course], ["DATE", cert.iso], ["GUIDE VERSION", VERSION], ["COMPLETION CODE", cert.code]];
     const cw = (R - L) / 4;
