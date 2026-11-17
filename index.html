@@ -626,9 +626,15 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
     let y = 60;
     const ensure = (h) => { if (y + h > H - 56) { doc.addPage(); y = 60; } };
     function para(t, o = {}) {
-      const size = o.size || 11, lh = size * (o.lh || 1.42), indent = o.indent || 0;
+      const size = o.size || 11, lh = size * (o.lh || 1.38), indent = o.indent || 0;
       doc.setFont("helvetica", o.style || "normal"); doc.setFontSize(size); doc.setTextColor(...(o.color || TXT));
-      doc.splitTextToSize(clean(t), TW - indent).forEach((line) => { ensure(lh); doc.text(line, L + indent, y); y += lh; });
+      const lines = doc.splitTextToSize(clean(t), TW - indent);
+      if (o.keep) ensure(lines.length * lh);
+      lines.forEach((line, i) => {
+        // Widow control: the last two lines of a paragraph go to the next page together.
+        ensure(i === lines.length - 2 && lines.length > 2 ? 2 * lh : lh);
+        doc.text(line, L + indent, y); y += lh;
+      });
       y += o.gap === undefined ? 7 : o.gap;
     }
     doc.setFillColor(...NAVY); doc.rect(0, 0, W, 8, "F");
@@ -637,8 +643,10 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
     para("Student AI Guide, version 2026-11", { size: 11, color: MUTE, gap: 14 });
     slides.forEach((sec) => {
       const h2 = sec.querySelector("h2");
-      ensure(60); y += 8;
-      doc.setDrawColor(...GOLD); doc.setLineWidth(2); doc.line(L, y - 12, L + 36, y - 12);
+      // Rule first, then the heading baseline far enough below it to clear the cap height.
+      ensure(76); y += 2;
+      doc.setDrawColor(...GOLD); doc.setLineWidth(2); doc.line(L, y, L + 36, y);
+      y += 18;
       para(h2.querySelector(".num").textContent + ". " + h2.textContent.replace(/^\d+/, ""), { size: 14, style: "bold", color: NAVY, gap: 5 });
       [...sec.children].forEach((el) => {
         if (el === h2 || el.classList.contains("noprint")) return;
@@ -655,7 +663,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
         } else if (el.classList.contains("callout")) para(el.textContent, { style: "bold" });
         else if (el.classList.contains("cases")) el.querySelectorAll(".case").forEach((c) => { para(c.querySelector("h3").textContent, { style: "bold", gap: 1 }); para(c.querySelector("p").textContent); });
         else if (el.classList.contains("template")) para(el.querySelector("p").textContent, { style: "italic", indent: 12 });
-        else if (el.tagName === "UL") el.querySelectorAll("li").forEach((li) => { const a = li.querySelector("a"); para("- " + li.textContent + (a ? " (" + a.href + ")" : ""), { gap: 3 }); });
+        else if (el.tagName === "UL") el.querySelectorAll("li").forEach((li) => { const a = li.querySelector("a"); para("- " + li.textContent + (a ? " (" + a.href + ")" : ""), { gap: 3, keep: true }); });
       });
     });
     const n = doc.getNumberOfPages();
