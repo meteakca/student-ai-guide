@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LTHD Student AI Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="What counts as AI use in LTHD courses, a short quiz, and a completion certificate to upload in each course.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Public+Sans:wght@600;700;800&display=swap">
+<style>
+/* Layout: three views (Read → Quiz → Certificate) under a navy band with a step tracker; reading is one column with a contents strip; quiz is one question per screen. */
+:root {
+  --bg: #faf9f6;
+  --surface: #f1f4f8;
+  --line: #d5dce6;
+  --text: #1c2430;
+  --text-2: #4a5566;
+  --navy: #0b2545;
+  --navy-ink: #ffffff;
+  --band: #f1efea;
+  --heading: #0b2545;
+  --kicker: #7a5d22;
+  --gold: #b8954f;
+  --link: #1d4f91;
+  --good: #1d6b3d;
+  --good-bg: #e7f3ec;
+  --bad: #a1311b;
+  --bad-bg: #fbece8;
+  --head: "Public Sans", "Segoe UI", Arial, sans-serif;
+  --body: "Atkinson Hyperlegible", "Segoe UI", Verdana, sans-serif;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1622; --surface: #172233; --line: #2a3a50; --text: #e8edf4; --text-2: #a9b6c7;
+    --navy: #0a1c33; --navy-ink: #ffffff; --band: #152236; --heading: #e8edf4; --kicker: #d3b170; --gold: #d3b170; --link: #8ab8f5;
+    --good: #7fd3a0; --good-bg: #13301f; --bad: #ff9c85; --bad-bg: #3a1a14;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1622; --surface: #172233; --line: #2a3a50; --text: #e8edf4; --text-2: #a9b6c7;
+  --navy: #0a1c33; --navy-ink: #ffffff; --band: #152236; --heading: #e8edf4; --kicker: #d3b170; --gold: #d3b170; --link: #8ab8f5;
+  --good: #7fd3a0; --good-bg: #13301f; --bad: #ff9c85; --bad-bg: #3a1a14;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font: 400 17px/1.65 var(--body); margin: 0; }
+.wrap { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+a { color: var(--link); text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-radius: 4px; }
+[tabindex="-1"]:focus { outline: none; }
+h1, h2, h3, .btn, .steps, .kicker { font-family: var(--head); }
+
+/* Band */
+.band { background: var(--band); color: var(--text); border-bottom: 1px solid var(--line); }
+.band .wrap { padding-block: 32px 0; }
+.kicker { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--kicker); margin: 0 0 10px; max-width: none !important; }
+h1 { font-size: clamp(30px, 5.6vw, 44px); line-height: 1.08; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; color: var(--heading); text-wrap: balance; }
+.band p { margin: 0; max-width: 58ch; color: var(--text-2); font-size: 18px; }
+.steps { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin: 24px 0 0; padding: 0; }
+.steps li { display: flex; gap: 10px; align-items: center; padding: 12px 4px 14px; border-bottom: 4px solid transparent; color: var(--text-2); font-size: 15px; font-weight: 600; min-width: 0; }
+.steps .dot { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 800; border: 2px solid currentColor; }
+.steps li.on { color: var(--heading); border-bottom-color: var(--gold); }
+.steps li.on .dot { background: var(--gold); border-color: var(--gold); color: #0b2545; }
+.steps li.done { color: var(--heading); }
+.steps li.done .dot { background: var(--heading); border-color: var(--heading); color: var(--bg); }
+
+/* Read view: one section per slide */
+.slidehead { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.sdots { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+.sdots button { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--line); background: var(--bg); color: var(--text-2); font: 700 13px var(--head); cursor: pointer; padding: 0; }
+.sdots button.seen { border-color: var(--gold); color: var(--text); }
+.sdots button[aria-current="step"] { border-color: var(--heading); background: var(--heading); color: var(--bg); }
+.sdots button:disabled { opacity: 0.4; cursor: not-allowed; }
+section.s { padding: 6px 0 0; }
+/* All slides share one grid cell, so the deck is as tall as the longest slide and the buttons stay put. */
+.deck { display: grid; }
+.deck > section.s { grid-area: 1 / 1; min-width: 0; }
+.deck > section.s.off { visibility: hidden; }
+.pager { position: sticky; bottom: 0; z-index: 4; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 28px; padding-block: 14px calc(14px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); background: var(--bg); }
+h2 { font-size: 25px; line-height: 1.25; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 14px; color: var(--text); text-wrap: balance; display: flex; gap: 12px; align-items: baseline; }
+h2 .num { flex: none; font-size: 14px; font-weight: 800; color: var(--navy); background: var(--gold); border-radius: 6px; padding: 1px 8px; position: relative; top: -2px; }
+p { margin: 0 0 16px; max-width: 66ch; }
+strong { font-weight: 700; }
+.callout { background: var(--surface); border-left: 5px solid var(--gold); border-radius: 0 var(--radius) var(--radius) 0; padding: 14px 18px; margin: 0 0 18px; }
+.callout p { margin: 0; }
+
+.tbl { overflow-x: auto; margin: 4px 0 18px; border: 1px solid var(--line); border-radius: var(--radius); }
+table { border-collapse: collapse; width: 100%; font-size: 16px; }
+th { text-align: left; font: 700 13px/1.3 var(--head); letter-spacing: 0.03em; text-transform: uppercase; color: var(--text-2); background: var(--surface); padding: 11px 14px; }
+td { padding: 12px 14px; border-top: 1px solid var(--line); vertical-align: top; line-height: 1.45; }
+td:first-child { font-weight: 700; }
+.lvl { display: inline-block; font: 700 13px var(--head); padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+.lvl.no { background: var(--bad-bg); color: var(--bad); }
+.lvl.re { background: #fdf3df; color: #7a5410; }
+.lvl.op { background: var(--good-bg); color: var(--good); }
+:root[data-theme="dark"] .lvl.re { background: #3a2e14; color: #f0cf8a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .lvl.re { background: #3a2e14; color: #f0cf8a; } }
+
+.cases { display: grid; gap: 12px; margin-bottom: 18px; }
+.case { border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; }
+.case h3 { font-size: 17px; font-weight: 700; margin: 0 0 6px; }
+.case p { margin: 0; }
+
+.template { background: var(--surface); border: 1px dashed var(--text-2); border-radius: var(--radius); padding: 16px 18px; margin: 0 0 16px; display: grid; gap: 12px; }
+.template p { margin: 0; font-style: italic; }
+
+ul.contacts { list-style: none; padding: 0; margin: 0 0 18px; display: grid; gap: 10px; }
+ul.contacts li { padding-left: 18px; position: relative; }
+ul.contacts li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 8px; height: 8px; border-radius: 2px; background: var(--gold); }
+.sel { user-select: all; font-weight: 700; }
+
+.gate { margin: 36px 0 64px; padding: 26px 24px; border-radius: var(--radius); background: var(--navy); color: #fff; display: grid; gap: 14px; }
+.gate h2 { color: #fff; margin: 0; }
+.gate p { color: #d9e2ee; margin: 0; }
+
+/* Buttons */
+.btn { font-size: 16px; font-weight: 700; border-radius: 8px; padding: 12px 20px; border: 2px solid var(--navy); background: var(--navy); color: #fff; cursor: pointer; justify-self: start; }
+.btn:hover:not(:disabled) { background: #163a68; border-color: #163a68; }
+.btn.gold { background: var(--gold); border-color: var(--gold); color: #0b2545; }
+.btn.gold:hover:not(:disabled) { background: #cfac66; border-color: #cfac66; }
+.btn.ghost { background: transparent; color: var(--text); border-color: var(--line); }
+.btn.ghost:hover:not(:disabled) { border-color: var(--text-2); background: var(--surface); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+:root[data-theme="dark"] .btn:not(.gold):not(.ghost) { background: #2b5ea8; border-color: #2b5ea8; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn:not(.gold):not(.ghost) { background: #2b5ea8; border-color: #2b5ea8; } }
+
+/* Quiz view */
+.view { padding-block: 32px 72px; }
+.qhead { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.qcount { font: 700 15px var(--head); color: var(--text-2); font-variant-numeric: tabular-nums; }
+.bar { height: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; margin-bottom: 26px; }
+.bar i { display: block; height: 100%; background: var(--gold); width: 0; transition: width .3s ease; }
+.qtext { font: 700 clamp(21px, 3.6vw, 25px)/1.35 var(--head); margin: 0 0 20px; letter-spacing: -0.01em; text-wrap: pretty; }
+fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.opts { display: grid; gap: 10px; margin-bottom: 20px; }
+.opt { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; border: 2px solid var(--line); border-radius: var(--radius); cursor: pointer; line-height: 1.45; background: var(--bg); }
+.opt:hover { border-color: var(--text-2); }
+.opt input { margin: 4px 0 0; width: 18px; height: 18px; accent-color: var(--navy); flex: none; }
+.opt:has(input:checked) { border-color: var(--link); background: var(--surface); }
+.opt.right { border-color: var(--good); background: var(--good-bg); }
+.opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+.fb { border-radius: var(--radius); padding: 14px 18px; margin-bottom: 20px; }
+.fb[hidden] { display: none; }
+.fb.ok { background: var(--good-bg); }
+.fb.no { background: var(--bad-bg); }
+.fb strong { display: block; font-family: var(--head); margin-bottom: 4px; }
+.fb.ok strong { color: var(--good); }
+.fb.no strong { color: var(--bad); }
+.fb p { margin: 0 0 8px; }
+.fb p:last-child { margin-bottom: 0; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.back-bar { position: sticky; bottom: 0; padding-block: 12px calc(12px + env(safe-area-inset-bottom, 0px)); background: var(--band); color: var(--text); border-top: 3px solid var(--gold); z-index: 5; font-weight: 700; }
+.back-bar .wrap { display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+
+/* Finish view */
+.ack { display: grid; gap: 10px; margin: 6px 0 22px; }
+.ack label { display: flex; gap: 14px; align-items: flex-start; padding: 13px 16px; border: 1px solid var(--line); border-radius: var(--radius); line-height: 1.45; cursor: pointer; }
+.ack label:has(input:checked) { border-color: var(--good); background: var(--good-bg); }
+.ack input { margin: 4px 0 0; width: 18px; height: 18px; accent-color: var(--navy); flex: none; }
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 10px; }
+.fields label { display: grid; gap: 6px; font: 700 15px var(--head); }
+.fields input { font: 400 17px var(--body); color: var(--text); background: var(--bg); border: 2px solid var(--line); border-radius: 8px; padding: 10px 12px; min-width: 0; }
+.fields input:focus { border-color: var(--link); outline: none; }
+.hint { font-size: 15px; color: var(--text-2); margin: 0 0 20px; }
+
+.cert { margin: 26px 0 18px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--bg); }
+.cert .top { background: var(--navy); color: #fff; padding: 18px 26px; display: flex; justify-content: space-between; gap: 6px 18px; flex-wrap: wrap; font: 700 13px var(--head); letter-spacing: 0.05em; text-transform: uppercase; }
+.cert .top span:last-child { color: var(--gold); }
+.cert .body { padding: clamp(20px, 5vw, 36px); display: grid; gap: 14px; border-bottom: 6px solid var(--gold); }
+.cert h3 { font: 800 clamp(26px, 5vw, 36px)/1.1 var(--head); margin: 0; letter-spacing: -0.02em; }
+.cert .label { font: 700 12px var(--head); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); margin-bottom: -8px; }
+.cert .who { font: 700 clamp(22px, 4.4vw, 30px)/1.15 var(--head); border-bottom: 2px solid var(--text); padding-bottom: 8px; overflow-wrap: anywhere; }
+.cert p { margin: 0; }
+.cert dl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px 18px; margin: 6px 0 0; padding-top: 14px; border-top: 1px solid var(--line); }
+.cert dt { font: 700 12px var(--head); letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-2); }
+.cert dd { margin: 3px 0 0; font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.status { font-size: 15px; color: var(--text-2); margin-top: 12px; }
+
+footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size: 14px; color: var(--text-2); }
+
+@media (max-width: 560px) {
+  .steps li { flex-direction: column; align-items: flex-start; gap: 6px; font-size: 13px; }
+  .fields { grid-template-columns: 1fr; }
+  .cert dl { grid-template-columns: 1fr 1fr; }
+  table { font-size: 15px; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+@media (prefers-reduced-motion: reduce) { .bar i { transition: none; } }
+</style>
+</head>
+<body>
+
+<div class="band">
+  <div class="wrap">
+    <p class="kicker">Leadership, Technology, and Human Development · Georgia Southern</p>
+    <h1>Using AI in Your LTHD Courses</h1>
+    <p>What counts as AI use, how to disclose it, and what happens when an instructor has questions. Read the guide, answer eight questions, and upload your certificate to each course.</p>
+    <ol class="steps" aria-label="Progress">
+      <li id="st1" class="on" aria-current="step"><span class="dot">1</span><span>Read the guide</span></li>
+      <li id="st2"><span class="dot">2</span><span>Quiz</span></li>
+      <li id="st3"><span class="dot">3</span><span>Certificate</span></li>
+    </ol>
+  </div>
+</div>
+
+<!-- VIEW 1: READ -->
+<main id="vRead" class="wrap view">
+  <div class="slidehead">
+    <span class="qcount" id="sCount" aria-live="polite">Section 1 of 9</span>
+    <ol class="sdots" id="sDots" aria-label="Sections"></ol>
+  </div>
+  <div class="bar" aria-hidden="true"><i id="sBar"></i></div>
+  <div class="deck">
+
+  <section class="s" id="s1">
+    <h2><span class="num">1</span>Your Syllabus Sets the Rule</h2>
+    <p>Every LTHD course sets its own AI level, which can also change from one assignment to the next. Read the AI statement in each syllabus before you start an assignment, and ask your instructor when you are unsure. A tool your instructor allowed last semester may be off limits in this course.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Level</th><th>What it allows</th></tr></thead>
+      <tbody>
+        <tr><td><span class="lvl no">No AI Use</span></td><td>Your own work only. Spelling and grammar checkers built into Word or Google Docs are fine.</td></tr>
+        <tr><td><span class="lvl re">Restricted Use</span></td><td>AI for the uses your syllabus lists, such as brainstorming or feedback on a draft. Everything else is your own work, and you disclose what you used.</td></tr>
+        <tr><td><span class="lvl op">Open Use</span></td><td>Broader AI use, disclosed in your work, with your own analysis and choices visible.</td></tr>
+      </tbody>
+    </table></div>
+    <p>AI that does the work for you, or AI use you keep hidden, is a violation at every level. The Code of Student Conduct treats using AI “to perform central requirements of an assignment” without permission as cheating, and presenting AI-generated text as your own as plagiarism (Ch. 12, A.1.a and A.4.a).</p>
+  </section>
+
+  <section class="s" id="s2">
+    <h2><span class="num">2</span>Tools with AI Built In</h2>
+    <p>Some AI works like the spell checker you already know (e.g., Grammarly): it flags a misspelled word or a missing comma, and you decide what to fix. Generative AI writes for you. It rewrites your sentences, drafts paragraphs, summarizes readings, and produces outlines from a prompt. Many familiar tools now do both.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Tool</th><th>Acceptable at every level</th><th>Counts as AI use</th></tr></thead>
+      <tbody>
+        <tr><td>Grammarly</td><td>Spelling and punctuation flags</td><td>Rewrites of sentences or paragraphs, tone changes, text generated from a prompt</td></tr>
+        <tr><td>Microsoft Word, Google Docs</td><td>Built-in spelling and grammar check</td><td>Copilot or Gemini drafting, rewriting, or summarizing</td></tr>
+        <tr><td>QuillBot and other paraphrasers</td><td>None</td><td>Any paraphrasing of your text or a source</td></tr>
+        <tr><td>AI reading summaries (PDF readers, browser add-ons)</td><td>None</td><td>Summaries you read in place of the source</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout"><p>Grammarly makes the line easy to cross without noticing. Its rewrite suggestions appear in the same panel as its spelling fixes, and one click replaces your sentence with its own. <strong>In a No AI Use course, use the checker in Word or Google Docs and leave Grammarly off.</strong></p></div>
+  </section>
+
+  <section class="s" id="s3">
+    <h2><span class="num">3</span>Common Situations</h2>
+    <div class="cases">
+      <div class="case"><h3>“I wrote it myself, then Grammarly rewrote some paragraphs.”</h3><p>In a No AI Use course, the rewritten paragraphs are AI-generated text. In a Restricted or Open Use course, check whether the syllabus allows AI editing, and disclose it.</p></div>
+      <div class="case"><h3>“I asked ChatGPT to find sources.”</h3><p>AI tools invent citations that look real. A fabricated citation is cheating at every level, including Open Use (Ch. 12, A.1.c). Find sources through the library or Google Scholar, and open every source you cite.</p></div>
+      <div class="case"><h3>“AI summarized the reading, and I wrote from the summary.”</h3><p>Reading and synthesizing are central requirements in most graduate courses. Unless your syllabus allows AI summaries, read the source.</p></div>
+    </div>
+  </section>
+
+  <section class="s" id="s4">
+    <h2><span class="num">4</span>Where AI Gets It Wrong</h2>
+    <p>AI produces text that sounds right because it learned patterns from human writing. It does not check facts. It is unreliable for current facts, citations, data interpretation, and answers to assignment questions. Work submitted as AI produced it, unchanged, is the clearest case of misuse.</p>
+  </section>
+
+  <section class="s" id="s5">
+    <h2><span class="num">5</span>Disclosing AI Use</h2>
+    <p>Unless your syllabus says otherwise, disclose every use of AI. Put a short statement at the end of the assignment:</p>
+    <div class="template">
+      <p id="tpl">I used [tool] to [task, e.g., suggest a structure for section 2 / check the clarity of my conclusion]. I reviewed and revised its suggestions, and the analysis and final wording are my own.</p>
+      <button type="button" class="btn ghost" id="copyTpl">Copy statement</button>
+    </div>
+    <p>Your instructor may ask for more, such as the prompts you used.</p>
+  </section>
+
+  <section class="s" id="s6">
+    <h2><span class="num">6</span>Your Drafts Are Your Record</h2>
+    <p>Keep your drafts, notes, and version history for every assignment. When an instructor has questions about a submission, the Office of Student Conduct looks at the writing process: version history in Word or Google Docs, document properties, Grammarly’s revision history, and your ability to explain and discuss the work. A student with a draft history can show how the work developed. Write in Word or Google Docs with version history on, and save your notes.</p>
+  </section>
+
+  <section class="s" id="s7">
+    <h2><span class="num">7</span>When an Instructor Has Questions</h2>
+    <p>An instructor who suspects unauthorized AI use files a report with the Office of the Provost and asks to meet with you. You receive written notice at least three class days before the meeting. You can see and respond to all the evidence the instructor relies on, and you can bring a witness (Ch. 12, C.1.a). A detection tool result is a reason for a conversation, and the conversation decides the case. A first-time case is usually settled with the instructor. You can decline the instructor’s resolution and ask for a formal hearing.</p>
+    <p>A finding of responsibility has consequences. In a first-time case, the instructor can reduce the grade on the assignment or for the course, up to a complete loss of credit for the course, and can assign an educational sanction such as a research paper. Fabricated sources or data lead to the most serious outcomes. While a case is open, the assignment grade stays as it is, and a final course grade is recorded as Incomplete. The Office of the Provost keeps a record of every finding. A student with a prior finding goes directly to the Office of Student Conduct, which can add a disciplinary warning, probation, suspension, or expulsion.</p>
+  </section>
+
+  <section class="s" id="s8">
+    <h2><span class="num">8</span>Why Do the Work Yourself</h2>
+    <p>Your degree certifies what you can do, and you learn to do it by doing the work. The effort of drafting an argument, working through a hard reading, or revising a weak paragraph is where the learning happens. A task you hand to AI before you can do it yourself is a skill you skip building. Experienced professionals use AI differently: they hand it routine work they have done many times and can check, and they keep the judgment for themselves. As a graduate student, you are building that experience now. Counselors, school leaders, school psychologists, and instructional designers who graduate from LTHD programs make decisions that depend on their own judgment, and your coursework is where you practice making them.</p>
+  </section>
+
+  <section class="s" id="s9">
+    <h2><span class="num">9</span>Contacts</h2>
+    <ul class="contacts">
+      <li>Your instructor, first, for any question about an assignment.</li>
+      <li>Office of Student Conduct: <span class="sel">studentconduct@georgiasouthern.edu</span>; Statesboro <span class="sel">912-478-0059</span> (Russell Union 2070); Armstrong and Liberty <span class="sel">912-344-2514</span> (Student Union D206).</li>
+      <li>Code of Student Conduct, Chapter Twelve: <a href="https://digitalcommons.georgiasouthern.edu/student-affairs/9/" target="_blank" rel="noopener">Georgia Southern Commons</a></li>
+    </ul>
+    <p class="noprint"><button type="button" class="btn ghost" data-guide-pdf>Download this guide (PDF)</button></p>
+    <p class="hint noprint" id="quizNote">Next: an eight-question quiz, one question at a time. A wrong answer shows you why and links back to the section, and you can try again as often as you need.</p>
+  </section>
+  </div>
+
+  <div class="pager">
+    <button type="button" class="btn ghost" id="sPrev">Back</button>
+    <button type="button" class="btn gold" id="sReturn" hidden>Return to question</button>
+    <button type="button" class="btn" id="sNext">Next</button>
+  </div>
+</main>
+
+<!-- VIEW 2: QUIZ -->
+<main id="vQuiz" class="wrap view" hidden>
+  <div class="qhead">
+    <span class="qcount" id="qCount" aria-live="polite">Question 1 of 8</span>
+    <button type="button" class="btn ghost" id="toGuide">Back to the guide</button>
+  </div>
+  <div class="bar" aria-hidden="true"><i id="qBar"></i></div>
+  <form id="qForm" novalidate>
+    <fieldset>
+      <legend class="qtext" id="qText" tabindex="-1"></legend>
+      <div class="opts" id="qOpts"></div>
+    </fieldset>
+    <div class="fb" id="qFb" hidden aria-live="polite"></div>
+    <div class="actions">
+      <button type="submit" class="btn" id="qCheck">Check answer</button>
+      <button type="button" class="btn gold" id="qNext" hidden>Next question</button>
+    </div>
+  </form>
+</main>
+
+<!-- VIEW 3: FINISH -->
+<main id="vDone" class="wrap view" hidden>
+  <h2 id="doneHead" tabindex="-1">All eight correct. One last step.</h2>
+  <p>Check each statement, then enter your name and the course this certificate is for.</p>
+  <form id="ackForm" novalidate>
+    <div class="ack" id="ackList"></div>
+    <div class="fields">
+      <label for="fullName">Full name<input id="fullName" name="fullName" autocomplete="name" required></label>
+      <label for="course">Course number (e.g., FRIT 7231)<input id="course" name="course" autocomplete="off" required></label>
+    </div>
+    <p class="hint">Need certificates for more than one course? Create one, download it, then change the course number and create the next.</p>
+    <button type="submit" class="btn" id="makeCert" disabled>Create certificate</button>
+  </form>
+
+  <div id="certWrap" hidden>
+    <div class="cert" id="cert" aria-label="Certificate of completion">
+      <div class="top"><span>LTHD · Georgia Southern University</span><span>Student AI Guide</span></div>
+      <div class="body">
+        <h3>Certificate of Completion</h3>
+        <div class="label">Awarded to</div>
+        <div class="who" id="cName"></div>
+        <p id="cText"></p>
+        <dl>
+          <div><dt>Course</dt><dd id="cCourse"></dd></div>
+          <div><dt>Date</dt><dd id="cDate"></dd></div>
+          <div><dt>Guide version</dt><dd>2026-11</dd></div>
+          <div><dt>Completion code</dt><dd id="cCode"></dd></div>
+        </dl>
+      </div>
+    </div>
+    <button type="button" class="btn gold" id="dlPdf">Download PDF</button>
+    <p class="status" id="dlStatus" aria-live="polite">Upload the PDF to the D2L assignment your instructor set up. If the download does not start, take a screenshot of the certificate and upload that.</p>
+    <p><button type="button" class="btn ghost" data-guide-pdf>Download the guide (PDF) to keep</button></p>
+  </div>
+</main>
+
+<div class="back-bar" id="backBar" hidden>
+  <div class="wrap">
+    <span id="backLabel">Reviewing for question 1</span>
+    <button type="button" class="btn gold" id="backToQ">Return to the question</button>
+  </div>
+</div>
+
+<footer class="wrap">
+  Department of Leadership, Technology, and Human Development · Guide version 2026-11 · Based on the Code of Student Conduct 2026–27, Chapter Twelve, and Georgia Southern’s Use of AI in Academic Contexts policy.
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(function () {
+  const VERSION = "2026-11";
+  const Q = [
+    { q: "Your course is No AI Use. Grammarly offers to rewrite a paragraph so it “sounds more fluent.” What do you do?",
+      a: ["Accept it, since Grammarly is a grammar tool",
+          "Accept it and mention Grammarly in a footnote",
+          "Decline it, and use the spelling and grammar checker in Word or Google Docs",
+          "Accept it if the paragraph keeps your main idea"], c: 2, s: 2,
+      e: "A rewrite is generative AI, even inside Grammarly. In a No AI Use course, spelling and grammar checks are fine and rewrites are off limits." },
+    { q: "Where do you find the AI rules for an assignment?",
+      a: ["In the university’s AI policy, which sets one rule for all courses",
+          "In the AI statement in that course’s syllabus and the assignment instructions",
+          "In the rules from the last course you took in the program",
+          "From classmates who took the course before"], c: 1, s: 1,
+      e: "Each course sets its own level, and an assignment can set a different one. Ask your instructor when you are unsure." },
+    { q: "Your course is Open Use. ChatGPT gives you five sources for your literature review. What do you do?",
+      a: ["Cite them, since AI use is allowed and you will disclose it",
+          "Find and open each source, and cite only the ones that exist and say what you claim",
+          "Cite them and add “generated by AI” after each one",
+          "Cite the ones that look most relevant"], c: 1, s: 3,
+      e: "AI tools invent citations that look real. A fabricated citation is cheating at every level, including Open Use." },
+    { q: "In a Restricted Use course, the syllabus allows AI for brainstorming. You used ChatGPT to brainstorm topics. What else do you do?",
+      a: ["Nothing, since brainstorming is allowed",
+          "Add a short statement saying which tool you used and what you used it for",
+          "Submit your chat history in place of the assignment",
+          "Ask ChatGPT to write the introduction too, since you already used it"], c: 1, s: 5,
+      e: "Allowed use still gets disclosed, unless your syllabus says otherwise." },
+    { q: "Which is the best record that your work is your own?",
+      a: ["A clean result from an online AI detector",
+          "Your drafts, notes, and version history in Word or Google Docs",
+          "A statement from a classmate who saw you working",
+          "A final copy saved as a PDF"], c: 1, s: 6,
+      e: "Version history, earlier drafts, and your ability to explain the work are what the Office of Student Conduct looks at." },
+    { q: "An AI tool summarized a required reading, and you wrote your response from the summary. The syllabus says nothing about AI summaries. Is that acceptable?",
+      a: ["Yes, since you wrote the response yourself",
+          "Yes, if the summary was accurate",
+          "No, since reading and synthesizing the source is part of the assignment",
+          "Yes, if you also skimmed the reading"], c: 2, s: 3,
+      e: "Reading and synthesizing are central requirements in most graduate courses. Read the source unless your syllabus allows AI summaries." },
+    { q: "Your instructor has questions about whether you wrote a paper. What happens first?",
+      a: ["You receive a zero, and the case is closed",
+          "The detector report decides the case",
+          "You receive written notice of a meeting, and you can see and respond to the evidence",
+          "You are referred straight to a formal hearing"], c: 2, s: 7,
+      e: "You get written notice at least three class days ahead, a chance to see and answer the evidence, and a conversation before any finding." },
+    { q: "What can happen after a first-time finding of unauthorized AI use?",
+      a: ["Nothing, since first cases receive a warning only",
+          "A lower grade on the assignment or for the course, up to a loss of credit for the course",
+          "Immediate expulsion",
+          "A note to your employer"], c: 1, s: 7,
+      e: "The instructor can reduce the grade, up to a complete loss of credit for the course, and can assign an educational sanction. A second finding goes to the Office of Student Conduct." }
+  ];
+  const ACK = [
+    "I read the LTHD Student Guide to AI Use.",
+    "I will check the AI level in each syllabus and assignment, and I will ask my instructor when I am unsure.",
+    "I will disclose any AI use my course allows, unless the syllabus says otherwise.",
+    "I will keep my drafts, notes, and version history for my assignments.",
+    "I understand that unauthorized AI use is academic dishonesty under Chapter Twelve of the Code of Student Conduct."
+  ];
+  const TITLES = {1:"Your Syllabus Sets the Rule",2:"Tools with AI Built In",3:"Common Situations",5:"Disclosing AI Use",6:"Your Drafts Are Your Record",7:"When an Instructor Has Questions"};
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const shuffle = (n) => { const a = [...Array(n).keys()]; for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+  let cur = 0, quizDone = false, reviewing = false;
+  const orders = Q.map((x) => shuffle(x.a.length));
+
+  // Views
+  function show(view) {
+    $("vRead").hidden = view !== "read";
+    $("vQuiz").hidden = view !== "quiz";
+    $("vDone").hidden = view !== "done";
+    const step = { read: 1, quiz: 2, done: 3 }[view];
+    [1, 2, 3].forEach((n) => {
+      const li = $("st" + n);
+      li.classList.toggle("on", n === step);
+      li.classList.toggle("done", n < step || (n === 2 && quizDone));
+      if (n === step) li.setAttribute("aria-current", "step"); else li.removeAttribute("aria-current");
+    });
+  }
+
+  function renderQ() {
+    const item = Q[cur];
+    $("qCount").textContent = `Question ${cur + 1} of ${Q.length}`;
+    $("qBar").style.width = (cur / Q.length * 100) + "%";
+    $("qText").textContent = item.q;
+    $("qOpts").innerHTML = orders[cur].map((oi) =>
+      `<label class="opt" for="o${oi}"><input type="radio" name="ans" id="o${oi}" value="${oi}"><span>${esc(item.a[oi])}</span></label>`).join("");
+    $("qFb").hidden = true; $("qFb").innerHTML = "";
+    $("qCheck").hidden = false; $("qNext").hidden = true;
+  }
+
+  // Guide slides
+  const slides = [...document.querySelectorAll("#vRead section.s")];
+  let si = 0, maxSeen = 0, quizStarted = false;
+  function renderSlide(focus) {
+    slides.forEach((s, i) => { const off = i !== si; s.classList.toggle("off", off); s.inert = off; s.setAttribute("aria-hidden", String(off)); });
+    maxSeen = Math.max(maxSeen, si);
+    const n = slides.length, last = si === n - 1;
+    $("sCount").textContent = `Section ${si + 1} of ${n}`;
+    $("sBar").style.width = ((si + 1) / n * 100) + "%";
+    $("sDots").innerHTML = slides.map((s, i) =>
+      `<li><button type="button" data-slide="${i}" class="${i <= maxSeen ? "seen" : ""}" ${i > maxSeen ? "disabled" : ""} ${i === si ? 'aria-current="step"' : ""} aria-label="Section ${i + 1}: ${esc(s.querySelector("h2").textContent.replace(/^\d+/, ""))}">${i + 1}</button></li>`).join("");
+    $("sPrev").disabled = si === 0;
+    const next = $("sNext");
+    next.textContent = !last ? "Next" : reviewing ? "Return to the question" : quizStarted ? "Back to the quiz" : "Start the quiz";
+    next.classList.toggle("gold", last);
+    $("quizNote").hidden = quizStarted;
+    if (focus) { window.scrollTo(0, 0); const h = slides[si].querySelector("h2"); h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }
+  }
+  $("sPrev").addEventListener("click", () => { if (si > 0) { si--; renderSlide(true); } });
+  $("sNext").addEventListener("click", () => {
+    if (si < slides.length - 1) { si++; renderSlide(true); return; }
+    if (reviewing) { backToQuestion(); return; }
+    startQuiz();
+  });
+  $("sDots").addEventListener("click", (ev) => {
+    const b = ev.target.closest("[data-slide]");
+    if (b && !b.disabled) { si = +b.dataset.slide; renderSlide(true); }
+  });
+  document.addEventListener("keydown", (ev) => {
+    if ($("vRead").hidden || ev.target.closest("input, textarea, button")) return;
+    if (ev.key === "ArrowRight" && si < slides.length - 1) { si++; renderSlide(true); }
+    if (ev.key === "ArrowLeft" && si > 0) { si--; renderSlide(true); }
+  });
+
+  function startQuiz() {
+    if (quizDone) { show("done"); window.scrollTo(0, 0); return; }
+    quizStarted = true;
+    show("quiz"); renderQ(); window.scrollTo(0, 0); $("qText").focus({ preventScroll: true });
+  }
+  $("toGuide").addEventListener("click", () => openReview(null));
+
+  $("qForm").addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    const item = Q[cur];
+    const pick = $("qOpts").querySelector("input:checked");
+    const fb = $("qFb");
+    $("qOpts").querySelectorAll(".opt").forEach((o) => o.classList.remove("right", "wrong"));
+    if (!pick) { fb.className = "fb no"; fb.innerHTML = "<strong>Choose an answer</strong><p>Select one option, then check it.</p>"; fb.hidden = false; return; }
+    if (+pick.value === item.c) {
+      pick.closest(".opt").classList.add("right");
+      $("qOpts").querySelectorAll("input").forEach((i) => (i.disabled = true));
+      fb.className = "fb ok";
+      fb.innerHTML = `<strong>Correct</strong><p>${esc(item.e)}</p>`;
+      fb.hidden = false;
+      $("qBar").style.width = ((cur + 1) / Q.length * 100) + "%";
+      $("qCheck").hidden = true;
+      $("qNext").hidden = false;
+      $("qNext").textContent = cur === Q.length - 1 ? "Finish" : "Next question";
+      $("qNext").focus();
+    } else {
+      pick.closest(".opt").classList.add("wrong");
+      fb.className = "fb no";
+      fb.innerHTML = `<strong>Try again</strong><p>${esc(item.e)}</p><p><button type="button" class="btn ghost" data-review="${item.s}">Review section ${item.s}: ${TITLES[item.s]}</button></p>`;
+      fb.hidden = false;
+    }
+  });
+  $("qFb").addEventListener("click", (ev) => {
+    const b = ev.target.closest("[data-review]");
+    if (b) openReview(+b.dataset.review);
+  });
+  $("qNext").addEventListener("click", () => {
+    if (cur < Q.length - 1) { cur++; renderQ(); window.scrollTo(0, 0); $("qText").focus({ preventScroll: true }); }
+    else { quizDone = true; buildAck(); show("done"); window.scrollTo(0, 0); $("doneHead").focus({ preventScroll: true }); }
+  });
+
+  // Review a section mid-quiz
+  function openReview(sec) {
+    reviewing = true;
+    show("read");
+    $("st2").classList.add("on");
+    $("backLabel").textContent = `Reviewing for question ${cur + 1} of ${Q.length}`;
+    $("sReturn").hidden = false;
+    if (sec) si = sec - 1;
+    renderSlide(true);
+  }
+  function backToQuestion() {
+    reviewing = false; $("sReturn").hidden = true; renderSlide(false); show("quiz"); window.scrollTo(0, 0); $("qText").focus({ preventScroll: true });
+  }
+  $("sReturn").addEventListener("click", backToQuestion);
+
+  // Acknowledgment
+  function buildAck() {
+    if ($("ackList").childElementCount) return;
+    $("ackList").innerHTML = ACK.map((t, i) => `<label for="ack${i}"><input type="checkbox" id="ack${i}"><span>${esc(t)}</span></label>`).join("");
+  }
+  function checkForm() {
+    const all = [...document.querySelectorAll("#ackList input")].every((i) => i.checked);
+    $("makeCert").disabled = !(all && $("fullName").value.trim().length > 1 && $("course").value.trim().length > 1);
+  }
+  $("ackForm").addEventListener("input", checkForm);
+  $("ackForm").addEventListener("change", checkForm);
+
+  // Completion code: FNV-1a over name|course|date|version. Shows the certificate was not typed by hand; not a security feature.
+  function code(str) {
+    let h = 0x811c9dc5;
+    for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+    const s = h.toString(36).toUpperCase().padStart(7, "0");
+    return s.slice(0, 4) + "-" + s.slice(4);
+  }
+
+  let cert = null;
+  $("ackForm").addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    if ($("makeCert").disabled || !quizDone) return;
+    const name = $("fullName").value.trim().replace(/\s+/g, " ");
+    const course = $("course").value.trim().replace(/\s+/g, " ").toUpperCase();
+    const d = new Date();
+    const iso = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    cert = { name, course, iso, code: code([name.toLowerCase(), course, iso, VERSION].join("|")) };
+    $("cName").textContent = name;
+    $("cText").textContent = `${name} completed the LTHD Student Guide to AI Use, answered all quiz questions correctly, and signed the acknowledgment.`;
+    $("cCourse").textContent = course;
+    $("cDate").textContent = iso;
+    $("cCode").textContent = cert.code;
+    $("certWrap").hidden = false;
+    $("dlStatus").textContent = "Upload the PDF to the D2L assignment your instructor set up. If the download does not start, take a screenshot of the certificate and upload that.";
+    $("certWrap").scrollIntoView({ block: "start" });
+  });
+
+  $("dlPdf").addEventListener("click", () => {
+    if (!cert) return;
+    const status = $("dlStatus");
+    if (!window.jspdf) { status.textContent = "The PDF tool did not load. Take a screenshot of the certificate and upload that."; return; }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "letter" });
+    const W = 792, H = 612, L = 64, R = W - 64;
+    const NAVY = [11, 37, 69], GOLD = [184, 149, 79], TXT = [28, 36, 48], MUTE = [74, 85, 102];
+    doc.setFillColor(...NAVY); doc.rect(0, 0, W, 78, "F");
+    doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(255, 255, 255);
+    doc.text("LEADERSHIP, TECHNOLOGY, AND HUMAN DEVELOPMENT  ·  GEORGIA SOUTHERN UNIVERSITY", L, 44);
+    doc.setTextColor(...GOLD); doc.text("STUDENT AI GUIDE", R, 44, { align: "right" });
+    doc.setFillColor(...GOLD); doc.rect(0, 78, W, 6, "F");
+    doc.setTextColor(...TXT); doc.setFontSize(38); doc.text("Certificate of Completion", L, 156);
+    doc.setFontSize(10); doc.setTextColor(...MUTE); doc.text("AWARDED TO", L, 210);
+    doc.setFontSize(30); doc.setTextColor(...TXT); doc.text(doc.splitTextToSize(cert.name, R - L)[0], L, 246);
+    doc.setDrawColor(...TXT); doc.setLineWidth(1.2); doc.line(L, 260, R, 260);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(14); doc.setTextColor(...TXT);
+    doc.text(doc.splitTextToSize(`${cert.name} completed the LTHD Student Guide to AI Use, answered all quiz questions correctly, and signed the acknowledgment.`, R - L), L, 296, { lineHeightFactor: 1.45 });
+    doc.setDrawColor(213, 220, 230); doc.setLineWidth(1); doc.line(L, 420, R, 420);
+    const cols = [["COURSE", cert.course], ["DATE", cert.iso], ["GUIDE VERSION", VERSION], ["COMPLETION CODE", cert.code]];
+    const cw = (R - L) / 4;
+    cols.forEach(([k, v], i) => {
+      const x = L + i * cw;
+      doc.setFont("helvetica", "bold"); doc.setFontSize(9); doc.setTextColor(...MUTE); doc.text(k, x, 444);
+      doc.setFontSize(14); doc.setTextColor(...TXT); doc.text(doc.splitTextToSize(v, cw - 12)[0], x, 466);
+    });
+    doc.setFont("helvetica", "normal"); doc.setFontSize(9.5); doc.setTextColor(...MUTE);
+    doc.text("Acknowledged: unauthorized AI use is academic dishonesty under Chapter Twelve of the Code of Student Conduct.", L, 540);
+    doc.setFillColor(...GOLD); doc.rect(0, H - 10, W, 10, "F");
+    const file = `AI-Guide-Certificate_${cert.course.replace(/[^A-Z0-9]+/g, "")}_${cert.name.replace(/[^A-Za-z0-9]+/g, "-")}.pdf`;
+    try { doc.save(file); status.textContent = `Saved ${file}. Upload it to the D2L assignment for ${cert.course}.`; }
+    catch (e) { status.textContent = "The download was blocked. Take a screenshot of the certificate and upload that."; }
+  });
+
+  // Guide as PDF, built from the slides so it always matches the page.
+  function guidePdf(btn) {
+    if (!window.jspdf) { btn.textContent = "PDF tool did not load"; return; }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: "pt", format: "letter" });
+    const W = 612, H = 792, L = 60, R = W - 60, TW = R - L;
+    const NAVY = [11, 37, 69], GOLD = [184, 149, 79], TXT = [28, 36, 48], MUTE = [74, 85, 102];
+    const clean = (s) => s.replace(/[“”]/g, '"').replace(/[‘’]/g, "'").replace(/[–—]/g, "-").replace(/\s+/g, " ").trim();
+    let y = 60;
+    const ensure = (h) => { if (y + h > H - 56) { doc.addPage(); y = 60; } };
+    function para(t, o = {}) {
+      const size = o.size || 11, lh = size * (o.lh || 1.42), indent = o.indent || 0;
+      doc.setFont("helvetica", o.style || "normal"); doc.setFontSize(size); doc.setTextColor(...(o.color || TXT));
+      doc.splitTextToSize(clean(t), TW - indent).forEach((line) => { ensure(lh); doc.text(line, L + indent, y); y += lh; });
+      y += o.gap === undefined ? 7 : o.gap;
+    }
+    doc.setFillColor(...NAVY); doc.rect(0, 0, W, 8, "F");
+    para("LEADERSHIP, TECHNOLOGY, AND HUMAN DEVELOPMENT - GEORGIA SOUTHERN UNIVERSITY", { size: 8.5, style: "bold", color: MUTE, gap: 22 });
+    para("Using AI in Your LTHD Courses", { size: 24, style: "bold", color: NAVY, lh: 1.2, gap: 4 });
+    para("Student AI Guide, version 2026-11", { size: 11, color: MUTE, gap: 14 });
+    slides.forEach((sec) => {
+      const h2 = sec.querySelector("h2");
+      ensure(60); y += 8;
+      doc.setDrawColor(...GOLD); doc.setLineWidth(2); doc.line(L, y - 12, L + 36, y - 12);
+      para(h2.querySelector(".num").textContent + ". " + h2.textContent.replace(/^\d+/, ""), { size: 14, style: "bold", color: NAVY, gap: 5 });
+      [...sec.children].forEach((el) => {
+        if (el === h2 || el.classList.contains("noprint")) return;
+        if (el.tagName === "P") para(el.textContent);
+        else if (el.classList.contains("tbl")) {
+          const th = [...el.querySelectorAll("th")].map((t) => t.textContent);
+          el.querySelectorAll("tbody tr").forEach((tr) => {
+            const td = [...tr.children].map((c) => c.textContent);
+            ensure(48); para(td[0], { style: "bold", gap: 1 });
+            td.slice(1).forEach((v, j) => para((th.length > 2 ? th[j + 1] + ": " : "") + v, { indent: 12, gap: 1 }));
+            y += 5;
+          });
+          y += 3;
+        } else if (el.classList.contains("callout")) para(el.textContent, { style: "bold" });
+        else if (el.classList.contains("cases")) el.querySelectorAll(".case").forEach((c) => { para(c.querySelector("h3").textContent, { style: "bold", gap: 1 }); para(c.querySelector("p").textContent); });
+        else if (el.classList.contains("template")) para(el.querySelector("p").textContent, { style: "italic", indent: 12 });
+        else if (el.tagName === "UL") el.querySelectorAll("li").forEach((li) => { const a = li.querySelector("a"); para("- " + li.textContent + (a ? " (" + a.href + ")" : ""), { gap: 3 }); });
+      });
+    });
+    const n = doc.getNumberOfPages();
+    for (let i = 1; i <= n; i++) {
+      doc.setPage(i); doc.setFont("helvetica", "normal"); doc.setFontSize(8.5); doc.setTextColor(...MUTE);
+      doc.text("LTHD Student AI Guide - version 2026-11", L, H - 30);
+      doc.text(`Page ${i} of ${n}`, R, H - 30, { align: "right" });
+    }
+    try { doc.save("LTHD-Student-AI-Guide-2026-11.pdf"); } catch (e) { btn.textContent = "Download blocked"; }
+  }
+  document.addEventListener("click", (ev) => { const b = ev.target.closest("[data-guide-pdf]"); if (b) guidePdf(b); });
+
+  $("copyTpl").addEventListener("click", async () => {
+    const t = $("tpl").textContent, btn = $("copyTpl");
+    try { await navigator.clipboard.writeText(t); btn.textContent = "Copied"; }
+    catch (e) { const r = document.createRange(); r.selectNodeContents($("tpl")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = "Selected. Press Ctrl+C or ⌘C"; }
+    setTimeout(() => (btn.textContent = "Copy statement"), 2500);
+  });
+
+  show("read");
+  renderSlide(false);
+})();
+</script>
+</body>
+</html>
