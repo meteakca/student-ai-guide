@@ -65,8 +65,13 @@ h1 { font-size: clamp(30px, 5.6vw, 44px); line-height: 1.08; font-weight: 800; l
 .toc { display: none; }
 @media (min-width: 1180px) {
   #vRead { position: relative; }
-  .toc { display: block; position: absolute; top: 32px; right: calc(100% + 8px); width: 230px; }
+  /* The rail spans the view's height so its list can stay in sight while a long slide scrolls. */
+  .toc { display: block; position: absolute; top: 32px; bottom: 72px; right: calc(100% + 8px); width: 230px; }
+  .toc ol { position: sticky; top: 24px; }
   .stitle { display: none; }
+  /* The rail already shows position; keep the count for screen readers only. */
+  #vRead > .slidehead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; }
+  #vRead > .bar { display: none; }
 }
 .toc ol { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--line); }
 .toc button { display: flex; gap: 10px; width: 100%; text-align: left; background: none; border: 0; border-left: 4px solid transparent; margin-left: -3px; padding: 8px 10px 8px 12px; border-radius: 0 6px 6px 0; font: 600 14.5px/1.35 var(--head); color: var(--text); cursor: pointer; }
