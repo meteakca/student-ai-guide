@@ -5,7 +5,7 @@ Public student guide to AI use, live at https://meteakca.github.io/student-ai-gu
 ## Layout
 
 - `guide.html` is the source. It is also the claude.ai preview (https://claude.ai/artifact/1n1Di3UHMna6zV2WxKqSAy), so it has no `<!doctype>`/`<head>`/`<body>` and is git-ignored.
-- `index.html` is generated from `guide.html` for Pages. Never edit it by hand. Rebuild it by wrapping `guide.html` in a doctype/head/body with a `color-scheme: light` meta (see the command in the session that built it, or reproduce: head = charset + viewport + color-scheme meta + everything up to `</style>`; body = the rest).
+- `index.html` is generated from `guide.html` for Pages. Never edit it by hand. Rebuild it with `./build.sh`, which wraps `guide.html` in a doctype/head/body (charset, viewport, `color-scheme: light`) and stamps the footer's "Last updated" time in Eastern time (placeholders `__UPDATED__` and `__UPDATED_ISO__` in `guide.html`, so the claude.ai preview shows the placeholder). Added 2026-11-18.
 - Content source of truth and decisions: `../student-ai-guide.md` (draft copy, quiz, acknowledgment). Change the wording there and in `guide.html` together.
 
 ## Conventions
@@ -18,4 +18,4 @@ Public student guide to AI use, live at https://meteakca.github.io/student-ai-gu
 - Section list: a left rail of headings at ≥1180px; narrower screens show "Section N of 10 · Title". Quiz "Review section" labels read the slide h2s, so a renamed heading needs no JS change.
 - Counting (2026-11-18): GoatCounter (`gsu-ai-guide.goatcounter.com`) logs page views plus one event per certificate download at path `certificate`. Since 2026-11-18 (later) no course number is sent either: everything the student types stays on the device, and the welcome screen, certificate form, and footer say so. Earlier rows at `certificate/<COURSE>` are from before that change. Ad blockers cause undercounting.
 - Certificate and guide PDFs are made in the browser with jsPDF 2.5.1 (cdnjs). Downloads do not work in the claude.ai preview; test on the live site or with Playwright.
-- After any change: syntax-check the script (`node --check` on the extracted `<script>`), rebuild `index.html`, commit, push. Commits end with the Co-Authored-By line.
+- After any change: syntax-check the script (`node --check` on the extracted `<script>`), run `./build.sh`, commit, push. Rebuild only when the page changed, since every build moves the "Last updated" time. Commits end with the Co-Authored-By line.
