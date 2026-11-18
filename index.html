@@ -75,7 +75,7 @@ h1 { font-size: clamp(32px, 5.6vw, 48px); line-height: 1.1; letter-spacing: -0.0
 .stitle::before { content: " · "; }
 .toc { display: none; }
 @media (min-width: 1180px) {
-  #vRead { position: relative; }
+  #vRead, #vIntro { position: relative; }
   /* The rail spans the view's height so its list can stay in sight while a long slide scrolls. */
   /* Rail and slide are centered together: the wrap widens by the rail's width and pads it on the left. */
   .wrap { max-width: 1020px; padding-left: 276px; }
@@ -226,15 +226,16 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
 
 <!-- VIEW 0: WELCOME -->
 <main id="vIntro" class="wrap view">
+  <nav class="toc" aria-label="Sections, available after you start the guide"><ol id="iDots"></ol></nav>
   <h2 id="introHead" tabindex="-1">About This Guide</h2>
-  <p>AI is now part of almost every tool you use for school. It drafts, summarizes, and rewrites in seconds. Speed makes AI useful. It also makes it easy to skip the work your courses are built around. The Student AI Guide explains what you learn from doing that work, where AI falls short, and how to use AI within your course’s rules. It is based on Chapter Twelve of the Code of Student Conduct and the university’s policy on AI in academic work.</p>
-  <p>Your instructor may ask you to complete the guide and upload a certificate to the course. It works the same way for every course:</p>
+  <p>AI is now part of almost every tool you use for school. AI drafts, summarizes, and rewrites in seconds. Speed makes AI useful, and speed also makes it easy to skip the work your courses are built around. The Student AI Guide explains what you learn by doing your own coursework, where AI falls short, and how to use AI within your course’s rules. The guide is based on Chapter Twelve of the Code of Student Conduct and the university’s policy on AI in academic work.</p>
+  <p>Your instructor may ask you to complete the guide and upload a certificate to the course. Every course uses these three steps:</p>
   <ol class="howto">
     <li><span><strong>Read the guide.</strong> Ten short sections cover doing the work yourself, the limits of AI, AI levels, tools with AI built in, disclosure, and where to get help.</span></li>
-    <li><span><strong>Take the quiz.</strong> Eight questions, one at a time. A wrong answer explains why and links back to the section. You can try again as often as you need.</span></li>
+    <li><span><strong>Take the quiz.</strong> The quiz shows eight questions one at a time. A wrong answer explains why and links back to the section. You can try again as often as you need.</span></li>
     <li><span><strong>Download your certificate.</strong> Enter your name and course number. Make one certificate for each course that asks for it.</span></li>
   </ol>
-  <div class="callout"><p>The guide does not replace your syllabus. Your instructor sets the AI level for each course and each assignment. Where this guide and the Code of Student Conduct differ, the Code governs. The site collects no names.</p></div>
+  <div class="callout"><p>Your syllabus and your assignment instructions set the AI rules for each course. Where this guide and the Code of Student Conduct differ, the Code governs. Your quiz answers, your name, and your certificate stay on your own device, and the website stores none of them. The site counts visits and certificate downloads by course number only.</p></div>
   <button type="button" class="btn gold" id="startGuide">Start the guide</button>
 </main>
 
@@ -249,19 +250,19 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
 
   <section class="s" id="s1">
     <h2><span class="num">1</span>Doing the Work Yourself</h2>
-    <p>AI is now built into the tools you use every day, from your word processor to your search engine. It makes producing work easy: a paragraph, a summary, or an outline appears in seconds. It also makes it easy to let AI do your thinking. You accept an answer because it sounds right, and you stop weighing it against your own judgment. Researchers call this cognitive surrender.</p>
-    <p>Your degree is a certification of what you can do. You learn those skills by doing the work during your education (and it is not easy). For example, the effort of drafting an argument, working through a hard reading, or revising a weak paragraph is where the learning happens. A task you hand to AI before you can do it yourself is a skill you skip building. Experienced professionals hand AI routine work they have done many times and can check. They keep the decisions that require their judgment for themselves. As a student, you are building that experience now. Teachers, counselors, school leaders, and other education professionals make decisions that depend on their own judgment. Your coursework is where you practice making those decisions.</p>
+    <p>AI is now built into the tools you use every day, from your word processor to your search engine. AI makes producing work easy: a paragraph, a summary, or an outline appears in seconds. AI also makes it easy to hand over your thinking. You accept an answer because the answer sounds right, and you stop weighing AI output against your own judgment. Researchers call accepting AI answers with little scrutiny cognitive surrender (<a href="https://papers.ssrn.com/abstract=6097646" target="_blank" rel="noopener">Shaw &amp; Nave, 2026</a>).</p>
+    <p>Your degree is a certification of what you can do. You learn those skills by doing the work during your education (and the work is hard). For example, the effort of drafting an argument, working through a hard reading, or revising a weak paragraph is where the learning happens. A task you hand to AI before you can do it yourself is a skill you skip building. Experienced professionals hand AI routine work they have done many times and can check. They keep the decisions that require their judgment for themselves. As a student, you are building that experience now. Teachers, counselors, school leaders, and other education professionals make decisions that depend on their own judgment. Your coursework is where you practice making those decisions.</p>
   </section>
 
   <section class="s" id="s2">
     <h2><span class="num">2</span>Limits of AI</h2>
-    <p>AI learned patterns from human writing, which is why its text sounds right. AI does not check whether that text is accurate. AI is unreliable for current facts, citations, data interpretation, and answers to assignment questions. Submitting AI output unchanged is the clearest case of misuse.</p>
+    <p>AI learned patterns from human writing, which is why its text sounds right. Checking the accuracy of AI text is your job. AI is unreliable for current facts, citations, data interpretation, and answers to assignment questions. Submitting AI output unchanged is the clearest case of misuse.</p>
   </section>
 
   <section class="s" id="s3">
     <h2><span class="num">3</span>The AI Level in Your Syllabus</h2>
-    <p>Your instructor sets the AI level for each course and states it in the syllabus. Your syllabus may use a statement from Georgia Southern’s AI Statement Builder, which describes the three levels below. The syllabus level is the default. An assignment’s instructions can change it: an Open Use course may have an exam with no AI allowed, and a No AI Use course may have one assignment where using AI is the task. When the two differ, follow the assignment instructions.</p>
-    <p>Read the AI statement in each syllabus and the instructions for each assignment before you start. If neither mentions AI, or you are unsure, ask your instructor before you use it. A tool your instructor allowed last semester may be off limits in this course.</p>
+    <p>Your instructor sets the AI level for each course and states the level in the syllabus. Your syllabus may use a statement from Georgia Southern’s AI Statement Builder, which describes the three levels below. The syllabus level is the default. An assignment’s instructions can change the level: an Open Use course may have an exam at the No AI Use level, and a No AI Use course may have one assignment where using AI is the task. When the syllabus and the assignment instructions differ, follow the assignment instructions.</p>
+    <p>Read the AI statement in each syllabus and the instructions for each assignment before you start. Ask your instructor before you use AI whenever you are unsure, including when the syllabus and the assignment instructions are silent on AI. A tool your instructor allowed last semester may be off limits in this course.</p>
     <div class="tbl" role="region" aria-label="Table" tabindex="0"><table>
       <thead><tr><th>Level</th><th>What it allows</th></tr></thead>
       <tbody>
@@ -285,7 +286,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
         <tr><td>AI reading summaries (PDF readers, browser add-ons)</td><td>None</td><td>Summaries you read in place of the source</td></tr>
       </tbody>
     </table></div>
-    <div class="callout"><p>With Grammarly, it is easy to use generative AI without noticing. Its rewrite suggestions appear in the same panel as its spelling fixes. One click replaces your sentence with Grammarly’s version. <strong>In a No AI Use course, turn Grammarly off and use the checker in Word or Google Docs.</strong></p></div>
+    <div class="callout"><p>With Grammarly, it is easy to use generative AI by accident. Its rewrite suggestions share one panel with its spelling fixes. One click replaces your sentence with Grammarly’s version. <strong>In a No AI Use course, turn Grammarly off and use the checker in Word or Google Docs.</strong></p></div>
   </section>
 
   <section class="s" id="s5">
@@ -315,14 +316,14 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
   <section class="s" id="s8">
     <h2><span class="num">8</span>Instructor Questions About Your Work</h2>
     <p>An instructor who suspects unauthorized AI use files a report with the Office of the Provost. The instructor then asks to meet with you. You receive written notice at least three class days before the meeting. You can see and respond to all the evidence the instructor relies on. You can also bring a witness (Ch. 12, C.1.a). A detection tool result is a reason for your instructor to talk with you. Your instructor decides the case after that conversation. A first-time case is usually settled with the instructor. If you disagree with the instructor’s resolution, you can ask for a formal hearing.</p>
-    <p>In a first-time case, the instructor decides the sanction for a finding of responsibility. The sanction can range from an educational sanction, such as a research paper, to a lower grade on the assignment, up to a complete loss of credit for the course. Students who fabricate sources or data face the most serious outcomes. While a case is open, the assignment grade stays as it is. Your course grade is recorded as Incomplete if final grades are due while the case is open. The Office of the Provost keeps a record of every finding. A student with a prior finding goes directly to the Office of Student Conduct. That office can add a disciplinary warning, probation, suspension, or expulsion.</p>
+    <p>In a first-time case, the instructor decides the sanction for a finding of responsibility. The sanction can range from an educational sanction, such as a research paper, to a lower grade on the assignment, up to a complete loss of credit for the course. Students who fabricate sources or data face the most serious outcomes. While a case is open, the assignment grade stays as it is. Your course grade is recorded as Incomplete if final grades are due while the case is open. The Office of the Provost keeps a record of every finding. A student with a prior finding goes directly to the Office of Student Conduct. The Office of Student Conduct can add a disciplinary warning, probation, suspension, or expulsion.</p>
   </section>
 
   <section class="s" id="s9">
     <h2><span class="num">9</span>Support on Campus</h2>
     <p>When an assignment feels hard, seek help from a person before you turn to AI. Seeking help is part of doing the work yourself. Seeking it early can also prevent an academic integrity case.</p>
     <div class="cases">
-      <div class="case"><h3>The Writing Center</h3><p>Tutors work with you at any stage of a paper: planning it, organizing a draft, strengthening an argument, or revising after feedback. They help you improve your own writing. They do not proofread or edit it for you. Meet in person at Henderson Library (Statesboro) or Lane Library (Armstrong), or by video. Schedule at <a href="https://georgiasouthern.mywconline.com/" target="_blank" rel="noopener">georgiasouthern.mywconline.com</a>.</p></div>
+      <div class="case"><h3>The Writing Center</h3><p>Tutors work with you at any stage of a paper: planning it, organizing a draft, strengthening an argument, or revising after feedback. They help you improve your own writing, and you do the proofreading and editing yourself. Meet in person at Henderson Library (Statesboro) or Lane Library (Armstrong), or by video. Schedule at <a href="https://georgiasouthern.mywconline.com/" target="_blank" rel="noopener">georgiasouthern.mywconline.com</a>.</p></div>
       <div class="case"><h3>Your Instructor’s Office Hours</h3><p>Office hours are for every student, at every stage of an assignment. Bring your questions about the expectations and the rubric before you start. Bring an outline or a rough draft when you are stuck or unsure how to organize your ideas. Bring a graded paper to go over the feedback and how to use it on the next assignment. Your instructor expects you to grow as a writer. Office hours support that growth.</p></div>
     </div>
   </section>
@@ -378,6 +379,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
       <label for="fullName">Full name<input id="fullName" name="fullName" autocomplete="name" required></label>
       <label for="course">Course number (e.g., FRIT 7231)<input id="course" name="course" autocomplete="off" required></label>
     </div>
+    <p class="hint">Your browser makes the certificate, and your name stays on your device. The site counts the download by course number only.</p>
     <p class="hint">Need certificates for more than one course? Create one, download it, then change the course number and create the next.</p>
     <button type="submit" class="btn" id="makeCert" disabled>Create certificate</button>
   </form>
@@ -415,7 +417,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
 </div>
 
 <footer class="wrap">
-  Student AI Guide · Version 2026-11 · Created by <a href="https://meteakcaoglu.com/">Mete Akcaoglu</a> · Based on the Code of Student Conduct 2026–27, Chapter Twelve, and Georgia Southern’s Use of AI in Academic Contexts policy. Not an official Georgia Southern University publication; where this guide and the Code of Student Conduct differ, the Code governs. The site counts page visits and certificate downloads by course number; it collects no names.
+  Student AI Guide · Version 2026-11 · Created by <a href="https://meteakcaoglu.com/">Mete Akcaoglu</a> · Based on the Code of Student Conduct 2026–27, Chapter Twelve, and Georgia Southern’s Use of AI in Academic Contexts policy. Not an official Georgia Southern University publication; where this guide and the Code of Student Conduct differ, the Code governs. The site counts page visits and certificate downloads by course number only. Names, quiz answers, and certificates stay on your device.
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -537,6 +539,9 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
     if (si > 0) { si--; renderSlide(true); return; }
     if (!reviewing) { show("intro"); window.scrollTo(0, 0); $("introHead").focus({ preventScroll: true }); }
   });
+  // Welcome screen: the same section list, grayed out until the guide starts.
+  $("iDots").innerHTML = slides.map((s, i) =>
+    `<li><button type="button" disabled><span class="n">${i + 1}</span><span>${esc(slideTitle(i))}</span></button></li>`).join("");
   $("startGuide").addEventListener("click", () => { show("read"); renderSlide(true); });
   $("sNext").addEventListener("click", () => {
     if (si < slides.length - 1) { si++; renderSlide(true); return; }
