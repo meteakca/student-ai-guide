@@ -114,7 +114,7 @@ td:first-child { font-weight: 700; }
 ul.contacts { list-style: none; padding: 0; margin: 0 0 18px; display: grid; gap: 10px; }
 ul.contacts li { padding-left: 18px; position: relative; }
 ul.contacts li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 8px; height: 8px; border-radius: 2px; background: var(--gold); }
-.sel { user-select: all; font-weight: 700; }
+.sel { user-select: all; font-weight: 700; overflow-wrap: anywhere; }
 
 .gate { margin: 36px 0 64px; padding: 26px 24px; border-radius: var(--radius); background: var(--navy); color: #fff; display: grid; gap: 14px; }
 .gate h2 { color: #fff; margin: 0; }
@@ -195,7 +195,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
 </head>
 <body>
 
-<div class="band">
+<header class="band">
   <div class="wrap">
     <p class="kicker">Student AI Guide</p>
     <h1>Using AI in Your Courses</h1>
@@ -206,7 +206,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
       <li id="st3"><span class="dot">3</span><span>Certificate</span></li>
     </ol>
   </div>
-</div>
+</header>
 
 <!-- VIEW 1: READ -->
 <main id="vRead" class="wrap view">
@@ -220,7 +220,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
   <section class="s" id="s1">
     <h2><span class="num">1</span>The AI Level in Your Syllabus</h2>
     <p>Your instructor sets the AI level for each course. The level can also change from one assignment to the next. Read the AI statement in each syllabus before you start an assignment. Ask your instructor when you are unsure. A tool your instructor allowed last semester may be off limits in this course.</p>
-    <div class="tbl"><table>
+    <div class="tbl" role="region" aria-label="Table" tabindex="0"><table>
       <thead><tr><th>Level</th><th>What it allows</th></tr></thead>
       <tbody>
         <tr><td><span class="lvl no">No AI Use</span></td><td>Your own work only. Spelling and grammar checkers built into Word or Google Docs are fine.</td></tr>
@@ -234,7 +234,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
   <section class="s" id="s2">
     <h2><span class="num">2</span>Tools with AI Built In</h2>
     <p>Some AI works like the spell checker you already know (e.g., Grammarly). It flags a misspelled word or a missing comma for you to fix. Generative AI writes for you: it rewrites your sentences, drafts paragraphs, summarizes readings, and produces outlines from a prompt. Many familiar tools, including Grammarly, now do both.</p>
-    <div class="tbl"><table>
+    <div class="tbl" role="region" aria-label="Table" tabindex="0"><table>
       <thead><tr><th>Tool</th><th>Acceptable at every level</th><th>Counts as AI use</th></tr></thead>
       <tbody>
         <tr><td>Grammarly</td><td>Spelling and punctuation flags</td><td>Rewrites of sentences or paragraphs, tone changes, text generated from a prompt</td></tr>
