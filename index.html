@@ -182,6 +182,9 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
 .cert .label { font: 700 12px var(--body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); margin-bottom: -8px; }
 .cert .who { font: 600 clamp(22px, 4.4vw, 30px)/1.15 var(--head); border-bottom: 2px solid var(--text); padding-bottom: 8px; overflow-wrap: anywhere; }
 .cert p { margin: 0; }
+.acked { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 15px; line-height: 1.45; }
+.acked li { padding-left: 24px; position: relative; }
+.acked li::before { content: "✓"; position: absolute; left: 2px; font-weight: 700; color: var(--good); }
 .cert dl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px 18px; margin: 6px 0 0; padding-top: 14px; border-top: 1px solid var(--line); }
 .cert dt { font: 700 12px var(--body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-2); }
 .cert dd { margin: 3px 0 0; font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
@@ -363,6 +366,8 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
         <div class="label">Awarded to</div>
         <div class="who" id="cName"></div>
         <p id="cText"></p>
+        <div class="label">Acknowledged</div>
+        <ul class="acked" id="cAck"></ul>
         <dl>
           <div><dt>Course</dt><dd id="cCourse"></dd></div>
           <div><dt>Date</dt><dd id="cDate"></dd></div>
@@ -604,7 +609,8 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
     const iso = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
     cert = { name, course, iso, code: code([name.toLowerCase(), course, iso, VERSION].join("|")) };
     $("cName").textContent = name;
-    $("cText").textContent = `${name} completed the Student Guide to AI Use, answered all quiz questions correctly, and signed the acknowledgment.`;
+    $("cText").textContent = `${name} completed the Student Guide to AI Use, answered all quiz questions correctly, and signed the acknowledgment below.`;
+    $("cAck").innerHTML = ACK.map((t) => `<li>${esc(t)}</li>`).join("");
     $("cCourse").textContent = course;
     $("cDate").textContent = iso;
     $("cCode").textContent = cert.code;
@@ -626,22 +632,34 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
     doc.text("GEORGIA SOUTHERN UNIVERSITY", L, 44);
     doc.setTextColor(...GOLD); doc.text("STUDENT AI GUIDE", R, 44, { align: "right" });
     doc.setFillColor(...GOLD); doc.rect(0, 78, W, 6, "F");
-    doc.setTextColor(...TXT); doc.setFontSize(38); doc.text("Certificate of Completion", L, 156);
-    doc.setFontSize(10); doc.setTextColor(...MUTE); doc.text("AWARDED TO", L, 210);
-    doc.setFontSize(30); doc.setTextColor(...TXT); doc.text(doc.splitTextToSize(cert.name, R - L)[0], L, 246);
-    doc.setDrawColor(...TXT); doc.setLineWidth(1.2); doc.line(L, 260, R, 260);
-    doc.setFont("helvetica", "normal"); doc.setFontSize(14); doc.setTextColor(...TXT);
-    doc.text(doc.splitTextToSize(`${cert.name} completed the Student Guide to AI Use, answered all quiz questions correctly, and signed the acknowledgment.`, R - L), L, 296, { lineHeightFactor: 1.45 });
-    doc.setDrawColor(213, 220, 230); doc.setLineWidth(1); doc.line(L, 420, R, 420);
+    doc.setTextColor(...TXT); doc.setFontSize(36); doc.text("Certificate of Completion", L, 146);
+    doc.setFontSize(10); doc.setTextColor(...MUTE); doc.text("AWARDED TO", L, 190);
+    doc.setFontSize(28); doc.setTextColor(...TXT); doc.text(doc.splitTextToSize(cert.name, R - L)[0], L, 222);
+    doc.setDrawColor(...TXT); doc.setLineWidth(1.2); doc.line(L, 236, R, 236);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(13); doc.setTextColor(...TXT);
+    const sent = doc.splitTextToSize(`${cert.name} completed the Student Guide to AI Use, answered all quiz questions correctly, and signed the acknowledgment below.`, R - L);
+    doc.text(sent, L, 266, { lineHeightFactor: 1.45 });
+    // The five acknowledgment statements, each with a drawn check (the built-in PDF fonts have no check glyph).
+    let y = 266 + sent.length * 19 + 18;
+    doc.setFont("helvetica", "bold"); doc.setFontSize(9); doc.setTextColor(...MUTE); doc.text("ACKNOWLEDGED", L, y);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(10.5); doc.setTextColor(...TXT);
+    doc.setDrawColor(29, 107, 61); doc.setLineWidth(1.6);
+    ACK.forEach((t) => {
+      const lines = doc.splitTextToSize(t, R - L - 20);
+      y += 17;
+      doc.line(L + 1, y - 4, L + 4.5, y - 0.5); doc.line(L + 4.5, y - 0.5, L + 11, y - 8);
+      doc.text(lines, L + 20, y, { lineHeightFactor: 1.35 });
+      y += (lines.length - 1) * 14;
+    });
+    y = Math.max(y + 26, 470);
+    doc.setDrawColor(213, 220, 230); doc.setLineWidth(1); doc.line(L, y, R, y);
     const cols = [["COURSE", cert.course], ["DATE", cert.iso], ["GUIDE VERSION", VERSION], ["COMPLETION CODE", cert.code]];
     const cw = (R - L) / 4;
     cols.forEach(([k, v], i) => {
       const x = L + i * cw;
-      doc.setFont("helvetica", "bold"); doc.setFontSize(9); doc.setTextColor(...MUTE); doc.text(k, x, 444);
-      doc.setFontSize(14); doc.setTextColor(...TXT); doc.text(doc.splitTextToSize(v, cw - 12)[0], x, 466);
+      doc.setFont("helvetica", "bold"); doc.setFontSize(9); doc.setTextColor(...MUTE); doc.text(k, x, y + 24);
+      doc.setFontSize(14); doc.setTextColor(...TXT); doc.text(doc.splitTextToSize(v, cw - 12)[0], x, y + 46);
     });
-    doc.setFont("helvetica", "normal"); doc.setFontSize(9.5); doc.setTextColor(...MUTE);
-    doc.text("Acknowledged: unauthorized AI use is academic dishonesty under Chapter Twelve of the Code of Student Conduct.", L, 540);
     doc.setFillColor(...GOLD); doc.rect(0, H - 10, W, 10, "F");
     const file = `AI-Guide-Certificate_${cert.course.replace(/[^A-Z0-9]+/g, "")}_${cert.name.replace(/[^A-Za-z0-9]+/g, "-")}.pdf`;
     try {
