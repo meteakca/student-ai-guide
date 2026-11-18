@@ -235,7 +235,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
     <li><span><strong>Take the quiz.</strong> The quiz shows eight questions one at a time. A wrong answer explains why and links back to the section. You can try again as often as you need.</span></li>
     <li><span><strong>Download your certificate.</strong> Enter your name and course number. Make one certificate for each course that asks for it.</span></li>
   </ol>
-  <div class="callout"><p>Your syllabus and your assignment instructions set the AI rules for each course. Where this guide and the Code of Student Conduct differ, the Code governs. Your quiz answers, your name, and your certificate stay on your own device, and the website stores none of them. The site counts visits and certificate downloads by course number only.</p></div>
+  <div class="callout"><p>Your syllabus and your assignment instructions set the AI rules for each course. Where this guide and the Code of Student Conduct differ, the Code governs. Your quiz answers, your name, your course number, and your certificate stay on your own device, and the website stores none of them. The site counts page visits and certificate downloads.</p></div>
   <button type="button" class="btn gold" id="startGuide">Start the guide</button>
 </main>
 
@@ -379,7 +379,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
       <label for="fullName">Full name<input id="fullName" name="fullName" autocomplete="name" required></label>
       <label for="course">Course number (e.g., FRIT 7231)<input id="course" name="course" autocomplete="off" required></label>
     </div>
-    <p class="hint">Your browser makes the certificate, and your name stays on your device. The site counts the download by course number only.</p>
+    <p class="hint">Your browser makes the certificate, and your name and course number stay on your device.</p>
     <p class="hint">Need certificates for more than one course? Create one, download it, then change the course number and create the next.</p>
     <button type="submit" class="btn" id="makeCert" disabled>Create certificate</button>
   </form>
@@ -417,7 +417,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
 </div>
 
 <footer class="wrap">
-  Student AI Guide · Version 2026-11 · Created by <a href="https://meteakcaoglu.com/">Mete Akcaoglu</a> · Based on the Code of Student Conduct 2026–27, Chapter Twelve, and Georgia Southern’s Use of AI in Academic Contexts policy. Not an official Georgia Southern University publication; where this guide and the Code of Student Conduct differ, the Code governs. The site counts page visits and certificate downloads by course number only. Names, quiz answers, and certificates stay on your device.
+  Student AI Guide · Version 2026-11 · Created by <a href="https://meteakcaoglu.com/">Mete Akcaoglu</a> · Based on the Code of Student Conduct 2026–27, Chapter Twelve, and Georgia Southern’s Use of AI in Academic Contexts policy. Not an official Georgia Southern University publication; where this guide and the Code of Student Conduct differ, the Code governs. The site counts page visits and certificate downloads. Names, course numbers, quiz answers, and certificates stay on your device.
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -700,7 +700,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
     try {
       doc.save(file); status.textContent = `Saved ${file}. Upload it to the D2L assignment for ${cert.course}.`;
       // Count downloads by course only; no names leave the browser.
-      try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: "certificate/" + cert.course.replace(/[^A-Z0-9]+/g, ""), title: "Certificate download", event: true }); } catch (e) {}
+      try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: "certificate", title: "Certificate download", event: true }); } catch (e) {}
     }
     catch (e) { status.textContent = "The download was blocked. Take a screenshot of the certificate and upload that."; }
   });
