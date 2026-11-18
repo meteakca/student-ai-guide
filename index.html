@@ -7,6 +7,7 @@
 <title>Student AI Guide</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="What counts as AI use in your courses, a short quiz, and a completion certificate to upload in each course.">
+<script data-goatcounter="https://gsu-ai-guide.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Public+Sans:wght@600;700;800&display=swap">
@@ -59,11 +60,21 @@ h1 { font-size: clamp(30px, 5.6vw, 44px); line-height: 1.08; font-weight: 800; l
 
 /* Read view: one section per slide */
 .slidehead { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
-.sdots { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
-.sdots button { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--line); background: var(--bg); color: var(--text-2); font: 700 13px var(--head); cursor: pointer; padding: 0; }
-.sdots button.seen { border-color: var(--gold); color: var(--text); }
-.sdots button[aria-current="step"] { border-color: var(--heading); background: var(--heading); color: var(--bg); }
-.sdots button:disabled { opacity: 0.4; cursor: not-allowed; }
+/* Section list: a rail to the left of the slide on wide screens; narrow screens show the current title beside the count. */
+.stitle::before { content: " · "; }
+.toc { display: none; }
+@media (min-width: 1180px) {
+  #vRead { position: relative; }
+  .toc { display: block; position: absolute; top: 32px; right: calc(100% + 8px); width: 230px; }
+  .stitle { display: none; }
+}
+.toc ol { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--line); }
+.toc button { display: flex; gap: 10px; width: 100%; text-align: left; background: none; border: 0; border-left: 4px solid transparent; margin-left: -3px; padding: 8px 10px 8px 12px; border-radius: 0 6px 6px 0; font: 600 14.5px/1.35 var(--head); color: var(--text); cursor: pointer; }
+.toc button .n { flex: none; min-width: 18px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.toc button:hover:not(:disabled):not([aria-current]) { color: var(--heading); text-decoration: underline; text-underline-offset: 3px; }
+.toc button[aria-current="step"] { border-left-color: var(--gold); background: var(--band); color: var(--heading); font-weight: 800; }
+.toc button[aria-current="step"] .n { color: var(--heading); }
+.toc button:disabled { color: var(--text-2); opacity: 0.5; cursor: not-allowed; }
 section.s { padding: 6px 0 0; }
 /* All slides share one grid cell, so the deck is as tall as the longest slide and the buttons stay put. */
 .deck { display: grid; }
@@ -194,30 +205,30 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
 
 <!-- VIEW 1: READ -->
 <main id="vRead" class="wrap view">
+  <nav class="toc" aria-label="Sections"><ol id="sDots"></ol></nav>
   <div class="slidehead">
     <span class="qcount" id="sCount" aria-live="polite">Section 1 of 10</span>
-    <ol class="sdots" id="sDots" aria-label="Sections"></ol>
   </div>
   <div class="bar" aria-hidden="true"><i id="sBar"></i></div>
   <div class="deck">
 
   <section class="s" id="s1">
-    <h2><span class="num">1</span>Your Syllabus Sets the Rule</h2>
-    <p>Every course sets its own AI level, which can also change from one assignment to the next. Read the AI statement in each syllabus before you start an assignment, and ask your instructor when you are unsure. A tool your instructor allowed last semester may be off limits in this course.</p>
+    <h2><span class="num">1</span>The AI Level in Your Syllabus</h2>
+    <p>Your instructor sets the AI level for each course. The level can also change from one assignment to the next. Read the AI statement in each syllabus before you start an assignment. Ask your instructor when you are unsure. A tool your instructor allowed last semester may be off limits in this course.</p>
     <div class="tbl"><table>
       <thead><tr><th>Level</th><th>What it allows</th></tr></thead>
       <tbody>
         <tr><td><span class="lvl no">No AI Use</span></td><td>Your own work only. Spelling and grammar checkers built into Word or Google Docs are fine.</td></tr>
-        <tr><td><span class="lvl re">Restricted Use</span></td><td>AI for the uses your syllabus lists, such as brainstorming or feedback on a draft. Everything else is your own work, and you disclose what you used.</td></tr>
-        <tr><td><span class="lvl op">Open Use</span></td><td>Broader AI use, disclosed in your work, with your own analysis and choices visible.</td></tr>
+        <tr><td><span class="lvl re">Restricted Use</span></td><td>AI for the uses your syllabus lists, such as brainstorming or feedback on a draft. Everything else is your own work. You disclose any AI you used.</td></tr>
+        <tr><td><span class="lvl op">Open Use</span></td><td>Broader AI use, which you disclose. Your own analysis and choices must be visible in the work.</td></tr>
       </tbody>
     </table></div>
-    <p>AI that does the work for you, or AI use you keep hidden, is a violation at every level. The Code of Student Conduct treats using AI “to perform central requirements of an assignment” without permission as cheating, and presenting AI-generated text as your own as plagiarism (Ch. 12, A.1.a and A.4.a).</p>
+    <p>Two uses of AI are violations at every level: AI that does the work for you, and AI use you keep hidden. Under the Code of Student Conduct, using AI “to perform central requirements of an assignment” without permission is cheating (Ch. 12, A.1.a). Presenting AI-generated text as your own is plagiarism (Ch. 12, A.4.a).</p>
   </section>
 
   <section class="s" id="s2">
     <h2><span class="num">2</span>Tools with AI Built In</h2>
-    <p>Some AI works like the spell checker you already know (e.g., Grammarly): it flags a misspelled word or a missing comma, and you decide what to fix. Generative AI writes for you. It rewrites your sentences, drafts paragraphs, summarizes readings, and produces outlines from a prompt. Many familiar tools now do both.</p>
+    <p>Some AI works like the spell checker you already know (e.g., Grammarly). It flags a misspelled word or a missing comma for you to fix. Generative AI writes for you: it rewrites your sentences, drafts paragraphs, summarizes readings, and produces outlines from a prompt. Many familiar tools, including Grammarly, now do both.</p>
     <div class="tbl"><table>
       <thead><tr><th>Tool</th><th>Acceptable at every level</th><th>Counts as AI use</th></tr></thead>
       <tbody>
@@ -227,55 +238,55 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
         <tr><td>AI reading summaries (PDF readers, browser add-ons)</td><td>None</td><td>Summaries you read in place of the source</td></tr>
       </tbody>
     </table></div>
-    <div class="callout"><p>Grammarly makes the line easy to cross without noticing. Its rewrite suggestions appear in the same panel as its spelling fixes, and one click replaces your sentence with its own. <strong>In a No AI Use course, use the checker in Word or Google Docs and leave Grammarly off.</strong></p></div>
+    <div class="callout"><p>With Grammarly, it is easy to use generative AI without noticing. Its rewrite suggestions appear in the same panel as its spelling fixes. One click replaces your sentence with Grammarly’s version. <strong>In a No AI Use course, turn Grammarly off and use the checker in Word or Google Docs.</strong></p></div>
   </section>
 
   <section class="s" id="s3">
     <h2><span class="num">3</span>Common Situations</h2>
     <div class="cases">
-      <div class="case"><h3>“I wrote it myself, then Grammarly rewrote some paragraphs.”</h3><p>In a No AI Use course, the rewritten paragraphs are AI-generated text. In a Restricted or Open Use course, check whether the syllabus allows AI editing, and disclose it.</p></div>
-      <div class="case"><h3>“I asked ChatGPT to find sources.”</h3><p>AI tools invent citations that look real. A fabricated citation is cheating at every level, including Open Use (Ch. 12, A.1.c). Find sources through the library or Google Scholar, and open every source you cite.</p></div>
-      <div class="case"><h3>“AI summarized the reading, and I wrote from the summary.”</h3><p>Reading and synthesizing are central requirements in most courses. Unless your syllabus allows AI summaries, read the source.</p></div>
+      <div class="case"><h3>“I wrote it myself, then Grammarly rewrote some paragraphs.”</h3><p>In a No AI Use course, the rewritten paragraphs are AI-generated text. In a Restricted or Open Use course, check whether the syllabus allows AI editing. If it does, disclose which paragraphs Grammarly rewrote.</p></div>
+      <div class="case"><h3>“I asked ChatGPT to find sources.”</h3><p>AI tools invent citations that look real. A fabricated citation is cheating at every level, including Open Use (Ch. 12, A.1.c). Find sources through the library or Google Scholar. Open and read every source you cite.</p></div>
+      <div class="case"><h3>“AI summarized the reading, and I wrote from the summary.”</h3><p>Reading and synthesizing are central requirements in most courses. Read the source unless your syllabus allows AI summaries.</p></div>
     </div>
   </section>
 
   <section class="s" id="s4">
-    <h2><span class="num">4</span>Where AI Gets It Wrong</h2>
-    <p>AI produces text that sounds right because it learned patterns from human writing. It does not check facts. It is unreliable for current facts, citations, data interpretation, and answers to assignment questions. Work submitted as AI produced it, unchanged, is the clearest case of misuse.</p>
+    <h2><span class="num">4</span>Limits of AI</h2>
+    <p>AI learned patterns from human writing, which is why its text sounds right. AI does not check whether that text is accurate. AI is unreliable for current facts, citations, data interpretation, and answers to assignment questions. Submitting AI output unchanged is the clearest case of misuse.</p>
   </section>
 
   <section class="s" id="s5">
     <h2><span class="num">5</span>Disclosing AI Use</h2>
-    <p>Unless your syllabus says otherwise, disclose every use of AI. Put a short statement at the end of the assignment:</p>
+    <p>Disclose every use of AI unless your syllabus says otherwise. Put a short statement at the end of the assignment:</p>
     <div class="template">
-      <p id="tpl">I used [tool] to [task, e.g., suggest a structure for section 2 / check the clarity of my conclusion]. I reviewed and revised its suggestions, and the analysis and final wording are my own.</p>
+      <p id="tpl">I used [tool] to [task, e.g., suggest a structure for section 2 / check the clarity of my conclusion]. I reviewed and revised its suggestions. The analysis and final wording are my own.</p>
       <button type="button" class="btn ghost" id="copyTpl">Copy statement</button>
     </div>
     <p>Your instructor may ask for more, such as the prompts you used.</p>
   </section>
 
   <section class="s" id="s6">
-    <h2><span class="num">6</span>Your Drafts Are Your Record</h2>
-    <p>Keep your drafts, notes, and version history for every assignment. When an instructor has questions about a submission, the Office of Student Conduct looks at the writing process: version history in Word or Google Docs, document properties, Grammarly’s revision history, and your ability to explain and discuss the work. A student with a draft history can show how the work developed. Write in Word or Google Docs with version history on, and save your notes.</p>
+    <h2><span class="num">6</span>Your Drafts as Your Record</h2>
+    <p>Keep your drafts, notes, and version history for every assignment. The Office of Student Conduct looks at your writing process when an instructor has questions about a submission. It checks version history in Word or Google Docs, document properties, Grammarly’s revision history, and your ability to explain and discuss the work. A student with a draft history can show how the work developed. Writing in Word or Google Docs with version history turned on gives you that history.</p>
   </section>
 
   <section class="s" id="s7">
-    <h2><span class="num">7</span>When an Instructor Has Questions</h2>
-    <p>An instructor who suspects unauthorized AI use files a report with the Office of the Provost and asks to meet with you. You receive written notice at least three class days before the meeting. You can see and respond to all the evidence the instructor relies on, and you can bring a witness (Ch. 12, C.1.a). A detection tool result is a reason for a conversation, and the conversation decides the case. A first-time case is usually settled with the instructor. You can decline the instructor’s resolution and ask for a formal hearing.</p>
-    <p>A finding of responsibility has consequences. In a first-time case, the instructor decides the sanction. It can range from an educational sanction, such as a research paper, to a lower grade on the assignment, up to a complete loss of credit for the course. Fabricated sources or data lead to the most serious outcomes. While a case is open, the assignment grade stays as it is, and a final course grade is recorded as Incomplete. The Office of the Provost keeps a record of every finding. A student with a prior finding goes directly to the Office of Student Conduct, which can add a disciplinary warning, probation, suspension, or expulsion.</p>
+    <h2><span class="num">7</span>Instructor Questions About Your Work</h2>
+    <p>An instructor who suspects unauthorized AI use files a report with the Office of the Provost. The instructor then asks to meet with you. You receive written notice at least three class days before the meeting. You can see and respond to all the evidence the instructor relies on. You can also bring a witness (Ch. 12, C.1.a). A detection tool result is a reason for your instructor to talk with you. Your instructor decides the case after that conversation. A first-time case is usually settled with the instructor. If you disagree with the instructor’s resolution, you can ask for a formal hearing.</p>
+    <p>In a first-time case, the instructor decides the sanction for a finding of responsibility. The sanction can range from an educational sanction, such as a research paper, to a lower grade on the assignment, up to a complete loss of credit for the course. Students who fabricate sources or data face the most serious outcomes. While a case is open, the assignment grade stays as it is. Your course grade is recorded as Incomplete if final grades are due while the case is open. The Office of the Provost keeps a record of every finding. A student with a prior finding goes directly to the Office of Student Conduct. That office can add a disciplinary warning, probation, suspension, or expulsion.</p>
   </section>
 
   <section class="s" id="s8">
-    <h2><span class="num">8</span>Why Do the Work Yourself</h2>
-    <p>Your degree certifies what you can do, and you learn to do it by doing the work. The effort of drafting an argument, working through a hard reading, or revising a weak paragraph is where the learning happens. A task you hand to AI before you can do it yourself is a skill you skip building. Experienced professionals use AI differently: they hand it routine work they have done many times and can check, and they keep the judgment for themselves. As a student, you are building that experience now. Teachers, counselors, school leaders, and other education professionals make decisions that depend on their own judgment, and your coursework is where you practice making them.</p>
+    <h2><span class="num">8</span>Doing the Work Yourself</h2>
+    <p>Your degree is a certification of what you can do. You learn those skills by doing the work during your education (and it is not easy). For example, the effort of drafting an argument, working through a hard reading, or revising a weak paragraph is where the learning happens. A task you hand to AI before you can do it yourself is a skill you skip building. Experienced professionals hand AI routine work they have done many times and can check. They keep the decisions that require their judgment for themselves. As a student, you are building that experience now. Teachers, counselors, school leaders, and other education professionals make decisions that depend on their own judgment. Your coursework is where you practice making those decisions.</p>
   </section>
 
   <section class="s" id="s9">
     <h2><span class="num">9</span>Support on Campus</h2>
-    <p>When an assignment feels hard, a person is a better first stop than AI. Asking for help is part of doing the work yourself, and asking early keeps a hard assignment from turning into a conduct case.</p>
+    <p>When an assignment feels hard, seek help from a person before you turn to AI. Seeking help is part of doing the work yourself. Seeking it early can also prevent an academic integrity case.</p>
     <div class="cases">
-      <div class="case"><h3>The Writing Center</h3><p>Tutors work with you at any stage of a paper: planning it, organizing a draft, strengthening an argument, or revising after feedback. They help you improve your own writing and do not proofread or edit it for you. Meet in person at Henderson Library (Statesboro) or Lane Library (Armstrong), or by video. Schedule at <a href="https://georgiasouthern.mywconline.com/" target="_blank" rel="noopener">georgiasouthern.mywconline.com</a>.</p></div>
-      <div class="case"><h3>Your Instructor’s Office Hours</h3><p>Office hours are for every student, at every stage of an assignment. Bring a question before you start, to check the expectations and the rubric. Bring an outline or a rough draft to work through its organization or a place where you are stuck. Bring a graded paper to understand the feedback and use it on the next assignment. Your instructor expects growth, and asking for help is part of it.</p></div>
+      <div class="case"><h3>The Writing Center</h3><p>Tutors work with you at any stage of a paper: planning it, organizing a draft, strengthening an argument, or revising after feedback. They help you improve your own writing. They do not proofread or edit it for you. Meet in person at Henderson Library (Statesboro) or Lane Library (Armstrong), or by video. Schedule at <a href="https://georgiasouthern.mywconline.com/" target="_blank" rel="noopener">georgiasouthern.mywconline.com</a>.</p></div>
+      <div class="case"><h3>Your Instructor’s Office Hours</h3><p>Office hours are for every student, at every stage of an assignment. Bring your questions about the expectations and the rubric before you start. Bring an outline or a rough draft when you are stuck or unsure how to organize your ideas. Bring a graded paper to go over the feedback and how to use it on the next assignment. Your instructor expects you to grow as a writer. Office hours support that growth.</p></div>
     </div>
   </section>
 
@@ -288,7 +299,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
       <li>Code of Student Conduct, Chapter Twelve: <a href="https://digitalcommons.georgiasouthern.edu/student-affairs/9/" target="_blank" rel="noopener">Georgia Southern Commons</a></li>
     </ul>
     <p class="noprint"><button type="button" class="btn ghost" data-guide-pdf>Download this guide (PDF)</button></p>
-    <p class="hint noprint" id="quizNote">Next: an eight-question quiz, one question at a time. A wrong answer shows you why and links back to the section, and you can try again as often as you need.</p>
+    <p class="hint noprint" id="quizNote">Next: an eight-question quiz, one question at a time. A wrong answer shows you why and links back to the section. You can try again as often as you need.</p>
   </section>
   </div>
 
@@ -363,7 +374,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
 </div>
 
 <footer class="wrap">
-  Student AI Guide · Version 2026-11 · Created by <a href="https://meteakcaoglu.com/">Mete Akcaoglu</a> · Based on the Code of Student Conduct 2026–27, Chapter Twelve, and Georgia Southern’s Use of AI in Academic Contexts policy. Not an official Georgia Southern University publication; where this guide and the Code of Student Conduct differ, the Code governs.
+  Student AI Guide · Version 2026-11 · Created by <a href="https://meteakcaoglu.com/">Mete Akcaoglu</a> · Based on the Code of Student Conduct 2026–27, Chapter Twelve, and Georgia Southern’s Use of AI in Academic Contexts policy. Not an official Georgia Southern University publication; where this guide and the Code of Student Conduct differ, the Code governs. The site counts page visits and certificate downloads by course number; it collects no names.
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -376,13 +387,13 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
           "Accept it and mention Grammarly in a footnote",
           "Decline it, and use the spelling and grammar checker in Word or Google Docs",
           "Accept it if the paragraph keeps your main idea"], c: 2, s: 2,
-      e: "A rewrite is generative AI, even inside Grammarly. In a No AI Use course, spelling and grammar checks are fine and rewrites are off limits." },
+      e: "A rewrite is generative AI, even inside Grammarly. In a No AI Use course, only spelling and grammar checks are allowed." },
     { q: "Where do you find the AI rules for an assignment?",
       a: ["In the university’s AI policy, which sets one rule for all courses",
           "In the AI statement in that course’s syllabus and the assignment instructions",
           "In the rules from the last course you took in the program",
           "From classmates who took the course before"], c: 1, s: 1,
-      e: "Each course sets its own level, and an assignment can set a different one. Ask your instructor when you are unsure." },
+      e: "Your instructor sets the AI level for each course. An assignment can also have a different level from the course. Ask your instructor when you are unsure." },
     { q: "Your course is Open Use. ChatGPT gives you five sources for your paper. What do you do?",
       a: ["Cite them, since AI use is allowed and you will disclose it",
           "Find and open each source, and cite only the ones that exist and say what you claim",
@@ -394,13 +405,13 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
           "Add a short statement saying which tool you used and what you used it for",
           "Submit your chat history in place of the assignment",
           "Ask ChatGPT to write the introduction too, since you already used it"], c: 1, s: 5,
-      e: "Allowed use still gets disclosed, unless your syllabus says otherwise." },
+      e: "Disclose allowed AI use too, unless your syllabus says otherwise." },
     { q: "Which is the best record that your work is your own?",
       a: ["A clean result from an online AI detector",
           "Your drafts, notes, and version history in Word or Google Docs",
           "A statement from a classmate who saw you working",
           "A final copy saved as a PDF"], c: 1, s: 6,
-      e: "Version history, earlier drafts, and your ability to explain the work are what the Office of Student Conduct looks at." },
+      e: "The Office of Student Conduct looks at version history, earlier drafts, and your ability to explain the work." },
     { q: "An AI tool summarized a required reading, and you wrote your response from the summary. The syllabus says nothing about AI summaries. Is that acceptable?",
       a: ["Yes, since you wrote the response yourself",
           "Yes, if the summary was accurate",
@@ -418,16 +429,15 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
           "It is up to the instructor: anything from an educational sanction, such as a research paper, to a lower grade on the assignment, up to a loss of credit for the course",
           "Suspend or expel you from the university",
           "Report the finding to your employer"], c: 1, s: 7,
-      e: "Your instructor decides the sanction. It can range from an educational sanction, such as a research paper, to a lower grade on the assignment, up to a complete loss of credit for the course. Warning, probation, suspension, and expulsion come only through the Office of Student Conduct." }
+      e: "Your instructor decides the sanction. The sanction can range from an educational sanction, such as a research paper, to a lower grade on the assignment, up to a complete loss of credit for the course. Only the Office of Student Conduct can issue a disciplinary warning, probation, suspension, or expulsion." }
   ];
   const ACK = [
     "I read the Student Guide to AI Use.",
-    "I will check the AI level in each syllabus and assignment, and I will ask my instructor when I am unsure.",
+    "I will check the AI level in each syllabus and assignment. When I am unsure, I will ask my instructor.",
     "I will disclose any AI use my course allows, unless the syllabus says otherwise.",
     "I will keep my drafts, notes, and version history for my assignments.",
     "I understand that unauthorized AI use is academic dishonesty under Chapter Twelve of the Code of Student Conduct."
   ];
-  const TITLES = {1:"Your Syllabus Sets the Rule",2:"Tools with AI Built In",3:"Common Situations",5:"Disclosing AI Use",6:"Your Drafts Are Your Record",7:"When an Instructor Has Questions"};
 
   const $ = (id) => document.getElementById(id);
   const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -463,15 +473,16 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
 
   // Guide slides
   const slides = [...document.querySelectorAll("#vRead section.s")];
+  const slideTitle = (i) => slides[i].querySelector("h2").textContent.replace(/^\d+/, "");
   let si = 0, maxSeen = 0, quizStarted = false;
   function renderSlide(focus) {
     slides.forEach((s, i) => { const off = i !== si; s.classList.toggle("off", off); s.inert = off; s.setAttribute("aria-hidden", String(off)); });
     maxSeen = Math.max(maxSeen, si);
     const n = slides.length, last = si === n - 1;
-    $("sCount").textContent = `Section ${si + 1} of ${n}`;
+    $("sCount").innerHTML = `Section ${si + 1} of ${n}<span class="stitle">${esc(slideTitle(si))}</span>`;
     $("sBar").style.width = ((si + 1) / n * 100) + "%";
     $("sDots").innerHTML = slides.map((s, i) =>
-      `<li><button type="button" data-slide="${i}" class="${i <= maxSeen ? "seen" : ""}" ${i > maxSeen ? "disabled" : ""} ${i === si ? 'aria-current="step"' : ""} aria-label="Section ${i + 1}: ${esc(s.querySelector("h2").textContent.replace(/^\d+/, ""))}">${i + 1}</button></li>`).join("");
+      `<li><button type="button" data-slide="${i}" class="${i <= maxSeen ? "seen" : ""}" ${i > maxSeen ? "disabled" : ""} ${i === si ? 'aria-current="step"' : ""}><span class="n">${i + 1}</span><span>${esc(slideTitle(i))}</span></button></li>`).join("");
     $("sPrev").disabled = si === 0;
     const next = $("sNext");
     next.textContent = !last ? "Next" : reviewing ? "Return to the question" : quizStarted ? "Back to the quiz" : "Start the quiz";
@@ -523,7 +534,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
     } else {
       pick.closest(".opt").classList.add("wrong");
       fb.className = "fb no";
-      fb.innerHTML = `<strong>Try again</strong><p>${esc(item.e)}</p><p><button type="button" class="btn ghost" data-review="${item.s}">Review section ${item.s}: ${TITLES[item.s]}</button></p>`;
+      fb.innerHTML = `<strong>Try again</strong><p>${esc(item.e)}</p><p><button type="button" class="btn ghost" data-review="${item.s}">Review section ${item.s}: ${esc(slideTitle(item.s - 1))}</button></p>`;
       fb.hidden = false;
     }
   });
@@ -621,7 +632,11 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 40px; font-size:
     doc.text("Acknowledged: unauthorized AI use is academic dishonesty under Chapter Twelve of the Code of Student Conduct.", L, 540);
     doc.setFillColor(...GOLD); doc.rect(0, H - 10, W, 10, "F");
     const file = `AI-Guide-Certificate_${cert.course.replace(/[^A-Z0-9]+/g, "")}_${cert.name.replace(/[^A-Za-z0-9]+/g, "-")}.pdf`;
-    try { doc.save(file); status.textContent = `Saved ${file}. Upload it to the D2L assignment for ${cert.course}.`; }
+    try {
+      doc.save(file); status.textContent = `Saved ${file}. Upload it to the D2L assignment for ${cert.course}.`;
+      // Count downloads by course only; no names leave the browser.
+      try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: "certificate/" + cert.course.replace(/[^A-Z0-9]+/g, ""), title: "Certificate download", event: true }); } catch (e) {}
+    }
     catch (e) { status.textContent = "The download was blocked. Take a screenshot of the certificate and upload that."; }
   });
 
